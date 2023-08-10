@@ -39,7 +39,7 @@
 			:columns="table1.columns"
 			:query-form-param="queryForm1"
 			:right-btns="['detail_auto','update','delete']"
-			:selection="true"
+			:selection="false"
 			:row-no="true"
 			:pagination="true"
 			@update="updateBtn"
@@ -63,7 +63,7 @@
 				:action="form1.props.action"
 				:form-type="form1.props.formType"
 				:columns='form1.props.columns'
-				label-width="120px"
+				label-width="140px"
 				@success="form1.props.show = false;refresh();"
 			></vk-data-form>
 		</vk-data-dialog>
@@ -91,14 +91,29 @@
 				// 表格相关开始 -----------------------------------------------------------
 				table1:{
 					// 表格数据请求地址
-					action:"template/db_api/sys/getList",
+					action:"common/lawyer/pub/getList",
 					// 表格字段显示规则
 					columns:[
-						{ key:"_id", title:"id", type:"text", width:220 },
-						{ key:"money", title:"金额", type:"money", width:80, sortable:"custom" },
-						{ key:"remark", title:"备注", type:"text", width:80 },
-						{ key:"_add_time", title:"添加时间", type:"time", width:160, sortable:"custom"  },
-						{ key:"_add_time", title:"距离现在", type:"dateDiff", width:120 },
+						{ key:"name", title:"姓名", type:"text",width:140,sortable:true},
+						{ key:"mobile", title:"手机号码", type:"text",width:140},
+						{ 
+						  key: "gender", title: "性别", type: "radio", width: 140, defaultValue:0,
+						      data:[
+						        { value:1, label:"男" },
+						        { value:2, label:"女" },
+						        { value:0, label:"保密"},
+						      ],width:140,sortable:true
+						},
+						{ key: "image", title: "图片", type: "image",width:140,show:["detail"]},
+						{ key: "job_year", title: "从业年限", type: "number",width:140,sortable:true},
+						{
+						  key: "desc", title: "简介", type: "textarea",
+						  autosize: { minRows: 8, maxRows: 15 },
+						  maxlength: 200,
+						  showWordLimit: true,
+						  show:["detail"]
+						},										
+						{ key: "is_home_show", title: "首页显示", type: "switch", activeValue: true, inactiveValue: false,width:140 },
 					],
 					// 多选框选中的值
 					multipleSelection:[],
@@ -115,8 +130,8 @@
 					},
 					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
 					columns:[
-						{ key:"remark", title:"备注", type:"text", width:160, mode:"%%" },
-						{ key:"_add_time", title:"添加时间", type:"datetimerange", width:400, mode:"[]" },
+						{ key:"name", title:"姓名", type:"text", width:160, mode:"%%" },
+						{ key:"mobile", title:"手机号", type:"text", width:200, mode:"=" },
 					]
 				},
 				form1:{
@@ -130,13 +145,14 @@
 						action:"",
 						// 表单字段显示规则
 						columns:[
-							{ key:"name", title:"姓名", type:"text", placeholder:"请输入律师姓名",width:300},
+							{ key:"name", title:"姓名", type:"text", placeholder:"请输入姓名",width:300},
+							{ key:"mobile", title:"手机号码", type:"text", placeholder:"请输入手机号码",width:300},
 							{ 
 							  key: "gender", title: "性别", type: "radio", width: 120, defaultValue:0,
 							      data:[
 							        { value:1, label:"男" },
 							        { value:2, label:"女" },
-							        { value:0, label:"保密" },
+							        { value:0, label:"保密", select:true},
 							      ]
 							},
 							{ key: "image", title: "图片", type: "image", limit:1 },
@@ -151,6 +167,14 @@
 						],
 						// 表单验证规则
 						rules:{
+							name:[
+								 { required: true, message: "律师姓名不能为空", trigger: ['blur','change']},
+							],
+							mobile:[								
+								{ required: true, message: "手机号码不能为空", trigger: ['blur','change']},
+								{ validator: vk.pubfn.validator("mobile"),  message: '手机号格式错误', trigger: 'blur' }
+							]
+							
 
 						},
 						// add 代表添加 update 代表修改
@@ -214,9 +238,9 @@
 			// 显示添加页面
 			addBtn(){
 				that.resetForm();
-				that.form1.props.action = 'template/db_api/sys/add';
+				that.form1.props.action = 'admin/lawyer/sys/add';
 				that.form1.props.formType = 'add';
-				that.form1.props.title = '添加';
+				that.form1.props.title = '添加律师';
 				that.form1.props.show = true;
 			},
 			// 显示修改页面
