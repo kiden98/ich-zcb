@@ -13,7 +13,9 @@
 					<view class="remember-password">
 						<el-checkbox v-model="checked"><text class="tips" style="font-size: 12px;">记住密码</text></el-checkbox>
 					</view>
+					<!--
 					<view class="forget-password"><text @click="forgetPassWord" style="font-size: 12px;">忘记密码？</text></view>
+					-->
 				</view>
 				<el-button class="login_but" type="primary" @click="submit">登录</el-button>
 			</el-form>
@@ -159,7 +161,7 @@ export default {
 .page-body {
 	width: 100%;
 	height: 100vh;
-	background: #46d0e7 url(../../static/bg/007.jpg?t=2) no-repeat fixed center center;
+	background: #46d0e7 url(../../static/bg/006.jpg?t=2) no-repeat fixed center center;
 	background-size: cover;
 	display: flex;
 	align-items: center;
