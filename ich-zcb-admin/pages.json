@@ -8,7 +8,8 @@
 				"leftWindow": false,
 				"navigationBarTitleText": "登录"
 			}
-		}
+		},		
+		{ "path": "pages/lawyer/list" }
 	],
 	"subPackages": [{
 			"root": "pages_plugs",
