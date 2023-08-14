@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/test/test"
+  ],
+  "subPackages": [
+    {
+      "root": "pages_template",
+      "pages": [
+        "db-test/db-test",
+        "db-test/list/list",
+        "uni-id/index/index",
+        "uni-id/password/password",
+        "uni-id/mobile/mobile",
+        "uni-id/univerify/univerify",
+        "uni-id/weixin/weixin",
+        "uni-id/weixin/h5-weixin",
+        "uni-id/weixin/set-user-info",
+        "uni-id/alipay/alipay",
+        "uni-id/qq/qq",
+        "uni-id/util/util",
+        "uni-id/email/email",
+        "uni-id/login/index/index",
+        "uni-id/login/register/register",
+        "uni-id/login/forget/forget",
+        "vk-vuex/vk-vuex",
+        "openapi/weixin/weixin",
+        "openapi/weixin/msgSecCheck/msgSecCheck",
+        "openapi/weixin/imgSecCheck/imgSecCheck",
+        "openapi/weixin/sendMessage/sendMessage",
+        "openapi/baidu/baidu",
+        "openapi/qq/qq",
+        "openapi/qq/msgSecCheck/msgSecCheck",
+        "openapi/qq/imgSecCheck/imgSecCheck",
+        "openapi/douyin/douyin",
+        "openapi/douyin/msgSecCheck/msgSecCheck",
+        "openapi/douyin/imgSecCheck/imgSecCheck",
+        "openapi/alipay/alipay",
+        "uni-id/test/test"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "方便自动填写地址"
+    }
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

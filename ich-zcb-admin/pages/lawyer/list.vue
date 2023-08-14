@@ -113,7 +113,23 @@
 						  showWordLimit: true,
 						  show:["detail"]
 						},										
-						{ key: "is_home_show", title: "首页显示", type: "switch", activeValue: true, inactiveValue: false,width:140 },
+						{ key: "is_home_show", title: "首页显示", type: "switch", activeValue: true, inactiveValue: false,width:140,
+							watch: (res) => {
+								console.log(res)
+								let { value, row, change } = res;
+								vk.callFunction({
+								  url: "admin/lawyer/sys/switchIsHomeShow",
+								  title: value ? "首页显示中..." : "取消首页显示中...",
+								  data: {
+									_id: row._id,
+									is_home_show: value
+								  },
+								  success: data => {
+									change(value); // 这一步是让表格行内的开关改变显示状态
+								  }
+								});
+							  }
+						},
 					],
 					// 多选框选中的值
 					multipleSelection:[],
@@ -245,7 +261,7 @@
 			},
 			// 显示修改页面
 			updateBtn({ item }){
-				that.form1.props.action = 'template/db_api/sys/update';
+				that.form1.props.action = 'admin/lawyer/sys/update';
 				that.form1.props.formType = 'update';
 				that.form1.props.title = '编辑';
 				that.form1.props.show = true;
@@ -254,7 +270,7 @@
 			// 删除按钮
 			deleteBtn({ item, deleteFn }){
 				deleteFn({
-					action:"template/db_api/sys/delete",
+					action:"admin/lawyer/sys/delete",
 					data:{
 						_id: item._id
 					},

@@ -1,0 +1,12 @@
+.app.data-v-feeea078 {
+  padding: 30rpx;
+}
+.app button.data-v-feeea078 {
+  margin-bottom: 30rpx;
+}
+.tips.data-v-feeea078 {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 32rpx;
+}
+

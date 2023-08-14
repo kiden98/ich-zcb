@@ -1,0 +1,1 @@
+<view class="app data-v-26af5731"><button data-event-opts="{{[['tap',[['chooseImage',['$event']]]]]}}" bindtap="__e" class="data-v-26af5731">上传图片,并检测图片是否违规</button><text space="ensp" class="data-v-26af5731">{{$root.g0}}</text></view>

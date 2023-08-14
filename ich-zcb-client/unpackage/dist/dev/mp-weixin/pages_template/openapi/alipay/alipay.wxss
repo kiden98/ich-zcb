@@ -1,0 +1,12 @@
+.app.data-v-41eebf04 {
+  padding: 30rpx;
+}
+.app button.data-v-41eebf04 {
+  margin-bottom: 30rpx;
+}
+.tips.data-v-41eebf04 {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 32rpx;
+}
+
