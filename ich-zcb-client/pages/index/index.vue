@@ -1,8 +1,6 @@
 <template>
 	<view>
-		演示页面首页在
-		pages_template/uni-id/index/index，
-		正式开发时，请删除此页面的 init 函数中的 vk.reLaunch("/pages_template/uni-id/index/index"); 代码
+		index
 	</view>
 </template>
 
@@ -53,7 +51,7 @@
 		methods: {
 			// 页面数据初始化函数
 			init(options){
-				vk.reLaunch("/pages_template/uni-id/index/index");
+				// vk.reLaunch("/pages_template/uni-id/index/index");
 			},
 			pageTo(path){
 				vk.navigateTo(path);

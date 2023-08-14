@@ -4,6 +4,7 @@ import config from '@/app.config.js'
 
 // 引入 uView UI
 // import uView from './uni_modules/vk-uview-ui';
+import uView from './uni_modules/vk-uview-ui';
 // 引入 vk框架前端
 import vk from './uni_modules/vk-unicloud';
 
@@ -11,6 +12,7 @@ import vk from './uni_modules/vk-unicloud';
 import Vue from 'vue'
 
 // 引入 uView UI
+Vue.use(uView);
 // Vue.use(uView);
 
 // 引入 vk框架前端

@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "其他",
-  "usingComponents": {}
+  "usingComponents": {
+    "u-avatar": "/uni_modules/vk-uview-ui/components/u-avatar/u-avatar"
+  }
 }

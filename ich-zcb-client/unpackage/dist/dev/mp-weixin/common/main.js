@@ -17,13 +17,15 @@ __webpack_require__(/*! @dcloudio/vue-cli-plugin-uni/packages/uni-cloud/dist/ind
 var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 39));
 var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 48));
 var _appConfig = _interopRequireDefault(__webpack_require__(/*! @/app.config.js */ 42));
-var _vkUnicloud = _interopRequireDefault(__webpack_require__(/*! ./uni_modules/vk-unicloud */ 53));
+var _vkUviewUi = _interopRequireDefault(__webpack_require__(/*! ./uni_modules/vk-uview-ui */ 53));
+var _vkUnicloud = _interopRequireDefault(__webpack_require__(/*! ./uni_modules/vk-unicloud */ 80));
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 25));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 // @ts-ignore
 wx.__webpack_require_UNI_MP_PLUGIN__ = __webpack_require__;
 // 引入 uView UI
+_vue.default.use(_vkUviewUi.default);
 // Vue.use(uView);
 
 // 引入 vk框架前端

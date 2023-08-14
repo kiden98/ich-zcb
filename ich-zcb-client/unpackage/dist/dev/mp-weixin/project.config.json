@@ -33,11 +33,10 @@
       "outputPath": ""
     },
     "disableUseStrict": false,
-    "useCompilerPlugins": false,
-    "minifyWXML": true
+    "useCompilerPlugins": false
   },
   "compileType": "miniprogram",
-  "libVersion": "3.0.0",
+  "libVersion": "",
   "appid": "wxdb27bf92216e9a1c",
   "projectname": "ich-zcb-client",
   "condition": {},
