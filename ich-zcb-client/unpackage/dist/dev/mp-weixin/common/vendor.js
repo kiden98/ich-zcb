@@ -17637,7 +17637,7 @@ var _default = {
   functionName: "router",
   // 登录页面路径
   login: {
-    url: '/pages_template/uni-id/login/index/index'
+    url: '/pages/me/me'
   },
   // 首页页面路径
   index: {
@@ -30116,7 +30116,17 @@ function updateManagerByMP() {
 /* 407 */,
 /* 408 */,
 /* 409 */,
-/* 410 */
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */
 /*!*****************************************************************************************!*\
   !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/emitter.js ***!
   \*****************************************************************************************/
@@ -30186,7 +30196,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 411 */
+/* 421 */
 /*!*************************************************************************************************!*\
   !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/async-validator.js ***!
   \*************************************************************************************************/
@@ -31364,10 +31374,10 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 412)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 422)))
 
 /***/ }),
-/* 412 */
+/* 422 */
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -31398,7 +31408,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 413);
+        if (!path) path = __webpack_require__(/*! path */ 423);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -31411,7 +31421,7 @@ exports.features = {};
 
 
 /***/ }),
-/* 413 */
+/* 423 */
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -31721,7 +31731,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 412)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 422)))
 
 /***/ })
 ]]);

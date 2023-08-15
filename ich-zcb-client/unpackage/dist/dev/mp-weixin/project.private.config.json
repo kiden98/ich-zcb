@@ -3,6 +3,5 @@
   "projectname": "ich-zcb-client",
   "setting": {
     "compileHotReLoad": true
-  },
-  "libVersion": "2.25.4"
+  }
 }

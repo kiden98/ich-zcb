@@ -11,6 +11,9 @@
 				
 			}
 		},
+		onLoad() {
+			vk.pubfn.checkLogin()
+		},
 		methods: {
 			
 		}

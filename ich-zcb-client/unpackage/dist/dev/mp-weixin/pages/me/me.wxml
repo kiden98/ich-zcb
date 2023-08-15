@@ -1,1 +1,1 @@
-<view>me</view>
+<view>{{'me: '+userInfo._id+''}}</view>
