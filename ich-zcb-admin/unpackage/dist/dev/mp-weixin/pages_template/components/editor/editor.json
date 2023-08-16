@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "vk-data-input-editor": "/components/vk-data-input-editor/vk-data-input-editor"
+  }
+}

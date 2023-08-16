@@ -1,0 +1,11 @@
+._div.data-v-e8dee4e0 {
+  padding: 12rpx 0rpx;
+  font-size: 30rpx;
+}
+.el-table .warning-row.data-v-e8dee4e0 {
+  background: oldlace !important;
+}
+.el-table .success-row.data-v-e8dee4e0 {
+  background: #f0f9eb !important;
+}
+

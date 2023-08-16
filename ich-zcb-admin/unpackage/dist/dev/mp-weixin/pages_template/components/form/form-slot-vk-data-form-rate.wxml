@@ -1,0 +1,1 @@
+<view style="height:36px;display:flex;align-items:center;" class="data-v-39197309"><el-rate bind:input="__e" vue-id="2bd521c6-3" value="{{form[keyName]}}" data-event-opts="{{[['^input',[['__set_model',['$0','$1','$event',[]],['form','keyName']]]]]}}" class="data-v-39197309" bind:__l="__l"></el-rate></view>

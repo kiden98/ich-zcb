@@ -118,11 +118,13 @@
 								console.log(res)
 								let { value, row, change } = res;
 								vk.callFunction({
-								  url: "admin/lawyer/sys/switchIsHomeShow",
+								  url: "admin/common/sys/switch",
 								  title: value ? "首页显示中..." : "取消首页显示中...",
 								  data: {
 									_id: row._id,
-									is_home_show: value
+									key: 'is_home_show',
+									value: value,
+									dbName: 'zcb-lawyer'
 								  },
 								  success: data => {
 									change(value); // 这一步是让表格行内的开关改变显示状态

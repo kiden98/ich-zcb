@@ -9,7 +9,8 @@
 				"navigationBarTitleText": "登录"
 			}
 		},		
-		{ "path": "pages/lawyer/list" }
+		{ "path": "pages/lawyer/list" },		
+		{ "path": "pages/category/list" }
 	],
 	"subPackages": [{
 			"root": "pages_plugs",

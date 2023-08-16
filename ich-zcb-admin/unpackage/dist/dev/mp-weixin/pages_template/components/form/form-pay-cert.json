@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "form-pay-cert-el-table-column-default": "/pages_template/components/form/form-pay-cert-el-table-column-default",
+    "form-pay-cert-el-table-column-default1": "/pages_template/components/form/form-pay-cert-el-table-column-default1"
+  }
+}

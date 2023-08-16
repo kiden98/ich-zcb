@@ -1,0 +1,11 @@
+.select-option.data-v-85d5d0ae {
+  background-color: #F8F8F8 !important;
+  color: red;
+}
+.topTip.data-v-85d5d0ae {
+  width: 300rpx;
+  height: 100rpx;
+  background-image: -webkit-gradient(linear, left top, right top, from(#243949), to(#517fa4));
+  background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
+}
+

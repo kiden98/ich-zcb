@@ -1,0 +1,171 @@
+view.data-v-617f116f,
+text.data-v-617f116f {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+page.data-v-617f116f {
+  width: 100%;
+  height: 100%;
+  background-color: #F5F7F9;
+}
+.page-body.data-v-617f116f {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #F5F7F9;
+}
+.page-body > view.data-v-617f116f {
+  border-radius: 8rpx;
+}
+.left.data-v-617f116f {
+  width: 800rpx;
+  background: #fff;
+  position: relative;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+  padding-bottom: 14rpx;
+  margin-right: 40rpx;
+  border-bottom: 2rpx solid #e8eaec;
+  position: relative;
+  margin-bottom: auto;
+}
+.left .el-icon-s-operation.data-v-617f116f {
+  margin-right: 10rpx;
+}
+.left > view.data-v-617f116f:first-of-type {
+  font-size: 32rpx;
+  border-bottom: 2rpx solid #e8eaec;
+  padding: 28rpx 32rpx;
+  margin-bottom: 14rpx;
+}
+.left > view.data-v-617f116f:not(:first-of-type) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 14rpx 32rpx;
+  color: #515a6e;
+  font-size: 14px !important;
+  white-space: nowrap;
+  list-style: none;
+  cursor: pointer;
+  -webkit-transition: background .2s ease-in-out;
+  transition: background .2s ease-in-out;
+}
+.left > view.data-v-617f116f:not(:first-of-type):hover {
+  background-color: #f3f3f3 !important;
+}
+.left > view:not(:first-of-type) > text.data-v-617f116f:first-of-type {
+  font-size: 28rpx;
+}
+.left > view:not(:first-of-type) > text.data-v-617f116f:last-of-type {
+  font-size: 22rpx;
+  color: #808695;
+}
+.select_list.data-v-617f116f {
+  color: #2d8cf0 !important;
+  background-color: #F0FAFF !important;
+}
+.select_list > text.data-v-617f116f {
+  color: #2d8cf0 !important;
+}
+.right.data-v-617f116f {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  background-color: #FFFFFF;
+  padding: 32rpx;
+}
+.right_title.data-v-617f116f {
+  font-size: 45rpx;
+  color: #515A6E;
+  font-weight: bolder;
+  letter-spacing: 2px;
+  margin-bottom: 20rpx;
+}
+.name_tips.data-v-617f116f {
+  margin-left: 32rpx;
+  padding: 40rpx 0rpx;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border-bottom: 2rpx solid #E8EAEC;
+  position: relative;
+}
+.name_tips .name.data-v-617f116f {
+  font-size: 30rpx;
+  font-weight: bolder;
+  letter-spacing: 2rpx;
+  margin-bottom: 16rpx;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.name_tips .name image.data-v-617f116f {
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 15rpx;
+}
+.name_tips .tips.data-v-617f116f {
+  font-size: 28rpx;
+  color: #808695;
+}
+.name_tips .operation.data-v-617f116f {
+  position: absolute;
+  float: right;
+  color: #2D8CF0;
+  right: 30rpx;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.name_tips .operation .operation_modify.data-v-617f116f:hover {
+  cursor: pointer;
+}
+.form.data-v-617f116f {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.form .form_input.data-v-617f116f {
+  width: 1000rpx;
+}
+.form .avater.data-v-617f116f {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-left: 100rpx;
+  margin-top: 100rpx;
+}
+.form .avater text.data-v-617f116f {
+  font-size: 28rpx;
+  color: #515a6e;
+}
+.form .avater image.data-v-617f116f {
+  margin-top: 10rpx;
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 10rpx;
+  display: block;
+}
+.form .avater .avater_but.data-v-617f116f {
+  margin-top: 30rpx;
+}
+.form .avater .avater_but ._i.data-v-617f116f {
+  margin-right: 10rpx;
+}
+

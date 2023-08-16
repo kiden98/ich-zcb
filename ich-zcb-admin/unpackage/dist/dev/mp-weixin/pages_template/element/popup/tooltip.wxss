@@ -1,0 +1,26 @@
+.box.data-v-2b1e3ae1 {
+  width: 400px;
+}
+.box .top.data-v-2b1e3ae1 {
+  text-align: center;
+}
+.box .left.data-v-2b1e3ae1 {
+  float: left;
+  width: 60px;
+}
+.box .right.data-v-2b1e3ae1 {
+  float: right;
+  width: 60px;
+}
+.box .bottom.data-v-2b1e3ae1 {
+  clear: both;
+  text-align: center;
+}
+.box .item.data-v-2b1e3ae1 {
+  margin: 4px;
+}
+.box .left .el-tooltip__popper.data-v-2b1e3ae1,
+.box .right .el-tooltip__popper.data-v-2b1e3ae1 {
+  padding: 8px 10px;
+}
+

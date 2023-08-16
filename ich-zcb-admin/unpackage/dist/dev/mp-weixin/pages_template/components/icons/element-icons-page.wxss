@@ -1,0 +1,44 @@
+.icons.data-v-6dc27ed5 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.icon-item.data-v-6dc27ed5 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 16.6%;
+  height: 120px;
+  font-size: 30px;
+  text-align: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.icon-item.data-v-6dc27ed5:hover,
+.icon-item:hover .icon-text.data-v-6dc27ed5 {
+  color: #007AFF;
+}
+.icon-text.data-v-6dc27ed5 {
+  color: #99a9bf;
+  font-size: 12px;
+  text-align: center;
+  height: 1em;
+  line-height: 1em;
+  margin-top: 15px;
+}
+@media only screen and (max-width: 500px) {
+.icon-item.data-v-6dc27ed5 {
+    width: 33.3%;
+}
+}
+

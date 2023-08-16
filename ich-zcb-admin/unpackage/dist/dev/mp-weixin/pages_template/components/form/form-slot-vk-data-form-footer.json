@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "form-slot-vk-data-form-rate": "/pages_template/components/form/form-slot-vk-data-form-rate",
+    "form-slot-vk-data-form-footer": "/pages_template/components/form/form-slot-vk-data-form-footer"
+  }
+}

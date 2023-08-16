@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "dialog-basic-vk-data-dialog-footer": "/pages_template/components/dialog/dialog-basic-vk-data-dialog-footer"
+  }
+}

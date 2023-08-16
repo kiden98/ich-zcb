@@ -1,0 +1,1 @@
+<block wx:if="{{scope.row.content&&scope.row.file===scope.row.name}}"><el-button vue-id="15749952-7" type="success" size="mini" plain="{{true}}" data-event-opts="{{[['^click',[['copy',['$0'],['scope.row.name']]]]]}}" bind:click="__e" class="data-v-42c1ae34" bind:__l="__l" vue-slots="{{['default']}}">复制</el-button></block>

@@ -1,0 +1,95 @@
+page.data-v-14f8a8a0 {
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+}
+.page-body.data-v-14f8a8a0 {
+  padding-top: 100rpx;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.page-body .el-icon-check.data-v-14f8a8a0 {
+  font-size: 90rpx;
+  margin: 50rpx 0rpx;
+  color: #FFFFFF;
+  background-color: #19BE6B;
+  padding: 35rpx;
+  border-radius: 50%;
+}
+.page-body .success.data-v-14f8a8a0 {
+  margin-bottom: 32rpx;
+  color: #17233d;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+}
+.page-body .txt.data-v-14f8a8a0 {
+  color: #808695;
+  font-size: 14px;
+  line-height: 22px;
+}
+.page-body .examine.data-v-14f8a8a0 {
+  margin-top: 40rpx;
+  background: #f8f8f9;
+  border-radius: 8rpx;
+  display: inline-block;
+  width: 69%;
+  height: 140rpx;
+  line-height: 140rpx;
+  padding-left: 80rpx;
+  color: #515a6e;
+  font-size: 30rpx;
+}
+.project_list.data-v-14f8a8a0 {
+  margin-top: 100rpx;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.project_list > text.data-v-14f8a8a0 {
+  display: inline-block;
+  width: 180rpx;
+  height: 60rpx;
+  border: 2rpx solid transparent;
+  text-align: center;
+  line-height: 60rpx;
+  font-size: 28rpx;
+  cursor: pointer;
+  border-radius: 8rpx;
+}
+.project_list > text.data-v-14f8a8a0:first-of-type {
+  border-color: #2D8CF0;
+  background-color: #2D8CF0;
+  color: #FFFFFF;
+}
+.project_list > text.data-v-14f8a8a0:first-of-type:hover {
+  background-color: #57a3f3 !important;
+}
+.project_list > text.data-v-14f8a8a0:nth-of-type(2) {
+  margin: 0rpx 20rpx;
+}
+.project_list > text.data-v-14f8a8a0:not(:first-of-type) {
+  border-color: #DCDEE2;
+}
+.project_list > text.data-v-14f8a8a0:not(:first-of-type):hover {
+  color: #57a3f3 !important;
+  border-color: #57a3f3 !important;
+}
+
