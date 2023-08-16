@@ -39,7 +39,7 @@
 		<vk-data-dialog
 			v-model="form1.props.show"
 			:title="form1.props.title"
-			width="800px"
+			width="960px"
 			mode="form"
 			:close-on-click-modal="false"
 		>
@@ -77,31 +77,58 @@
 				// 表格相关开始 -----------------------------------------------------------
 				table1:{
 					// 表格数据请求地址
-					action:"common/category/pub/getList",
+					action:"common/product/pub/getList",
 					// 表格字段显示规则
 					columns:[
-						{ key:"name", title:"分类名称", type:"text", placeholder:"请输入分类名称",width:250},
-						{ key: "image", title: "分类图片", type: "image",width:250 },
-						{ key: "is_home_show", title: "首页显示", type: "switch", activeValue: true, inactiveValue: false,width:250,
-							watch: (res) => {
-								console.log(res)
-								let { value, row, change } = res;
-								vk.callFunction({
-								  url: "admin/common/sys/switch",
-								  title: value ? "首页显示中..." : "取消首页显示中...",
-								  data: {
-									_id: row._id,
-									key: 'is_home_show',
-									value: value,
-									dbName: 'zcb-category'
-								  },
-								  success: data => {
-									change(value); // 这一步是让表格行内的开关改变显示状态
-								  }
-								});
+						
+						{ key: "category_name", title: "所属分类", type: "text"},
+						{ key:"name", title:"商品名称", type:"text"},
+						{ key:"info", title:"商品介绍", type:"text",show:['detail']},						
+						{ key: "image", title: "封面图片", type: "image",show:['detail']},				
+						{ key: "slider_image", title: "轮播图片", type: "image",show:['detail']},				
+						{ key: "price", title: "商品价格", type: "money"},				
+						{ key: "ot_price", title: "商品售价", type: "money"},	
+						{ key: "sales", title: "销量", type: "number",sortable:'custom'},
+						{ key: "browse", title: "浏览量", type: "number",sortable:'custom'},
+						{ key: "is_sale", title: "是否上架", type: "switch", activeValue: true, inactiveValue: false,
+						 watch: (res) => {
+						 	console.log(res)
+						 	let { value, row, change } = res;
+						 	vk.callFunction({
+						 	  url: "admin/common/sys/switch",
+						 	  title: value ? "上架中..." : "取消上架中...",
+						 	  data: {
+						 		_id: row._id,
+						 		key: 'is_sale',
+						 		value: value,
+						 		dbName: 'zcb-product'
+						 	  },
+						 	  success: data => {
+						 		change(value); // 这一步是让表格行内的开关改变显示状态
+						 	  }
+						 	});
+						   }
+						 },
+						{ key: "is_hot", title: "是否热卖", type: "switch", activeValue: true, inactiveValue: false,
+						watch: (res) => {
+							console.log(res)
+							let { value, row, change } = res;
+							vk.callFunction({
+							  url: "admin/common/sys/switch",
+							  title: value ? "热卖中..." : "取消热卖中...",
+							  data: {
+								_id: row._id,
+								key: 'is_hot',
+								value: value,
+								dbName: 'zcb-product'
+							  },
+							  success: data => {
+								change(value); // 这一步是让表格行内的开关改变显示状态
 							  }
-						},						
-						{ key: "sort", title: "显示顺序", type: "number",width:250},								
+							});
+						  }},							
+						{ key: "sort", title: "显示顺序", type: "number"},							
+						{ key: "desc", title: "商品详情", type: "html",show:['detail']},													
 					],
 					// 多选框选中的值
 					multipleSelection:[],
@@ -118,7 +145,7 @@
 					},
 					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
 					columns:[
-						{ key:"name", title:"分类名称", type:"text", width:160, mode:"%%" }
+						{ key:"name", title:"商品名称", type:"text", width:160, mode:"%%" }
 					]
 				},
 				form1:{
@@ -132,15 +159,38 @@
 						action:"",
 						// 表单字段显示规则
 						columns:[
-							{ key:"name", title:"分类名称", type:"text", placeholder:"请输入分类名称",width:300},							
-							{ key: "image", title: "分类图片", type: "image", limit:1 },
-							{ key: "is_home_show", title: "首页显示", type: "switch", activeValue: true, inactiveValue: false },							
-							{ key: "sort", title: "显示顺序", type: "number"},
+							{
+							  key: "category_id", title: "所属分类", type: "remote-select", placeholder: "请选择分类",
+							  action: "common/category/pub/getList",
+							  props: { list: "rows", value: "_id", label: "name" },
+							  showAll: true,
+							  actionData: {
+							    pageSize: 200
+							  },width:150
+							},
+							{ key:"name", title:"商品名称", type:"text",width:500},
+							{ key:"info", title:"商品介绍", type:"text",width:500},						
+							{ key: "image", title: "封面图片", type: "image", limit:1 },				
+							{ key: "slider_image", title: "轮播图片", type: "image", limit:5 },				
+							{ key: "price", title: "商品价格", type: "money",width:150},				
+							{ key: "ot_price", title: "商品售价", type: "money",width:150},	
+							{ key: "sales", title: "销量", type: "number",width:150},
+							{ key: "browse", title: "浏览量", type: "number",width:150},
+							{ key: "is_sale", title: "是否上架", type: "switch", activeValue: true, inactiveValue: false },
+							{ key: "is_hot", title: "是否热卖", type: "switch", activeValue: true, inactiveValue: false },							
+							{ key: "sort", title: "显示顺序", type: "number",width:150},							
+							{ key: "desc", title: "商品详情", type: "editor"},
 						],
 						// 表单验证规则
 						rules:{
+							category_id:[
+								{ required: true, message: "分类名称必选", trigger: ['blur','change']},
+							],
 							name:[
-								 { required: true, message: "分类名称不能为空", trigger: ['blur','change']},
+								 { required: true, message: "商品名称不能为空", trigger: ['blur','change']},
+							],
+							ot_price:[
+								 { required: true, message: "商品售价不能为空", trigger: ['blur','change']},
 							]
 						},
 						// add 代表添加 update 代表修改
@@ -204,14 +254,14 @@
 			// 显示添加页面
 			addBtn(){
 				that.resetForm();
-				that.form1.props.action = 'admin/category/sys/add';
+				that.form1.props.action = 'admin/product/sys/add';
 				that.form1.props.formType = 'add';
 				that.form1.props.title = '添加分类';
 				that.form1.props.show = true;
 			},
 			// 显示修改页面
 			updateBtn({ item }){
-				that.form1.props.action = 'admin/category/sys/update';
+				that.form1.props.action = 'admin/product/sys/update';
 				that.form1.props.formType = 'update';
 				that.form1.props.title = '编辑';
 				that.form1.props.show = true;
@@ -220,7 +270,7 @@
 			// 删除按钮
 			deleteBtn({ item, deleteFn }){
 				deleteFn({
-					action:"admin/category/sys/delete",
+					action:"admin/product/sys/delete",
 					data:{
 						_id: item._id
 					},

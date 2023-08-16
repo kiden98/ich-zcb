@@ -10,7 +10,8 @@
 			}
 		},		
 		{ "path": "pages/lawyer/list" },		
-		{ "path": "pages/category/list" }
+		{ "path": "pages/category/list" },		
+		{ "path": "pages/product/list" }
 	],
 	"subPackages": [{
 			"root": "pages_plugs",
