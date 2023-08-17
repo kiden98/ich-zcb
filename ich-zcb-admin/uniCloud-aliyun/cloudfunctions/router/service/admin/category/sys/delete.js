@@ -14,8 +14,19 @@ module.exports = {
 		let res = { code : 0, msg : 'ok' };
     // 业务逻辑开始-----------------------------------------------------------
 		let { _id } = data;
+		
 		if(vk.pubfn.isNull(_id)){
 			return { code : -1, msg : 'id不能为空' };
+		}
+		//判断分类下是否还有商品
+		let product = await vk.baseDao.findByWhereJson({
+		  dbName:"zcb-product",
+		  whereJson:{
+		    category_id:_id
+		  }
+		});
+		if(product) {
+			return { code : -1, msg : '该分类下存在商品，请先删除商品后重试！' };
 		}
 		let dbName = "zcb-category";
 		await vk.baseDao.deleteById({

@@ -9,9 +9,10 @@
 				"navigationBarTitleText": "登录"
 			}
 		},		
-		{ "path": "pages/lawyer/list" },		
-		{ "path": "pages/category/list" },		
-		{ "path": "pages/product/list" }
+		{ "path": "pages/lawyer/list"},		
+		{ "path": "pages/category/list"},		
+		{ "path": "pages/product/list"},	
+		{ "path": "pages/swipper/list"}
 	],
 	"subPackages": [{
 			"root": "pages_plugs",

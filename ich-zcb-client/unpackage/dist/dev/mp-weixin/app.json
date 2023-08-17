@@ -86,6 +86,5 @@
       "desc": "方便自动填写地址"
     }
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

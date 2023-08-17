@@ -136,10 +136,14 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 28));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 31));
+var _api = _interopRequireDefault(__webpack_require__(/*! @/api */ 494));
 //
 //
 //
@@ -153,6 +157,7 @@ var _default = {
   data: function data() {
     // 页面数据变量
     return {
+      swipperList: [],
       // init请求返回的数据
       data: {},
       // 表单请求数据
@@ -183,6 +188,36 @@ var _default = {
     // 页面数据初始化函数
     init: function init(options) {
       // vk.reLaunch("/pages_template/uni-id/index/index");
+      this.loadSwipper();
+    },
+    loadSwipper: function loadSwipper() {
+      var _this = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var res;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                res = _api.default.getSwipperList({
+                  // 查询表单数据源，可在此设置默认值
+                  formData: {
+                    is_show: true
+                  },
+                  // 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
+                  columns: [{
+                    key: "is_show",
+                    mode: "="
+                  }]
+                });
+                _this.swipperList = res.rows;
+                console.log('res:', res);
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     },
     pageTo: function pageTo(path) {
       vk.navigateTo(path);

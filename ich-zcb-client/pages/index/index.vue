@@ -6,11 +6,13 @@
 
 
 <script>
+	import api from '@/api'
 	var vk = uni.vk;
 	export default {
 		data() {
 			// 页面数据变量
 			return {
+				swipperList:[],
 				// init请求返回的数据
 				data:{
 					
@@ -52,6 +54,22 @@
 			// 页面数据初始化函数
 			init(options){
 				// vk.reLaunch("/pages_template/uni-id/index/index");
+				this.loadSwipper();
+			},
+			async loadSwipper(){
+				
+				const res = api.getSwipperList({
+						// 查询表单数据源，可在此设置默认值
+						formData:{
+							is_show:true
+						},
+						// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
+						columns:[
+							{ key:"is_show",  mode:"=" },
+						]
+					})
+				this.swipperList = res.rows;
+				console.log('res:',res)
 			},
 			pageTo(path){
 				vk.navigateTo(path);
