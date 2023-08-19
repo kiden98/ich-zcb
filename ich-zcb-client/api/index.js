@@ -1,16 +1,21 @@
-const apiObj = {
-	//方法名：具体的方法
-	//获取轮播图的api
-	getSwipperList: async (data,isLoading=true)=>{
-		const options = {
-			url:'common/swipper/pub/getList',
-			data
-		}
-		if(isLoading) {
-			options.title = '数据加载中'
-		}
-		const res = await vk.callFunction(options)
-		return res
-	}	
+import API_CONFIG from './config.js'
+
+const getApiObj = (config) => {
+	const apiObj = {}
+	for(let key in config) {
+		apiObj[key] = async (data,isLoading=true)=>{
+			const options = {
+				url:config[key][0],
+				data
+			}
+			if(isLoading) {
+				options.title = '数据加载中'
+			}
+			const res = await vk.callFunction(options)
+			return res
+		}	
+	}
+	return apiObj
 }
-export default apiObj
+
+export default getApiObj(API_CONFIG)

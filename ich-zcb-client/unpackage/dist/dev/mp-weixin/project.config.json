@@ -1,5 +1,5 @@
 {
-  "description": "项目配置文件，详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "description": "项目配置文件。",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -12,29 +12,12 @@
     "newFeature": true,
     "bigPackageSizeSupport": true,
     "checkSiteMap": false,
-    "coverView": true,
-    "lazyloadPlaceholderEnable": false,
-    "preloadBackgroundData": false,
-    "autoAudits": false,
-    "uglifyFileName": false,
-    "uploadWithSourceMap": true,
-    "enhance": true,
-    "useMultiFrameRuntime": true,
-    "showShadowRootInWxmlPanel": true,
-    "packNpmManually": false,
-    "packNpmRelationList": [],
-    "minifyWXSS": true,
-    "disableUseStrict": false,
-    "ignoreUploadUnusedFiles": true,
-    "checkInvalidKey": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
-    "useStaticServer": true,
-    "showES6CompileOption": false,
-    "useCompilerPlugins": false
+    "condition": false
   },
   "compileType": "miniprogram",
   "libVersion": "3.0.0",

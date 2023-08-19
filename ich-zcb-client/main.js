@@ -8,12 +8,19 @@ import uView from './uni_modules/vk-uview-ui';
 // 引入 vk框架前端
 import vk from './uni_modules/vk-unicloud';
 
+//引入全局API
+import api from '@/api'
+
 // #ifndef VUE3
 import Vue from 'vue'
 
 // 引入 uView UI
 Vue.use(uView);
 // Vue.use(uView);
+
+
+//引入全局API
+Vue.prototype.api = api
 
 // 引入 vk框架前端
 Vue.use(vk);
