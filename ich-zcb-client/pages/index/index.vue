@@ -8,7 +8,7 @@
 		</view>
 		<view class="category-wrap">
 			<u-grid :col="4" :border="false">
-				<u-grid-item v-for="(category,index) in categoryList" :key="index">
+				<u-grid-item v-for="(category,index) in categoryList" :key="index" @click="clickCategory(category._id)">
 					<u-image :src="category.image" width="150" height="150"></u-image>
 					<view class="grid-text">{{category.name}}</view>
 				</u-grid-item>
@@ -23,7 +23,7 @@
 				<u-line color="#e32a42"></u-line>		
 			</view>				
 			<view class="product-list">
-				<view class="product-item" v-for="(item,index) in productList" :key="index">
+				<view class="product-item" v-for="(item,index) in productList" :key="index" @click="clickProduct(item._id)">
 					<u-lazy-load threshold="300" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
 					<view class="product-name">
 						{{item.name ||""}}
@@ -41,7 +41,8 @@
 							{{item.ot_price || 0}}
 						</view>
 						<view class="shopping-cart">
-							<u-icon name="shopping-cart-fill" color="#dd6161" size="40"></u-icon>
+							<!--这里的点击会冒泡到上一层的click事件，所以不能用@click，需要用@tap.stop -->
+							<u-icon name="shopping-cart-fill" color="#dd6161" size="40" @tap.stop="clickShoppingCart(item._id)"></u-icon>
 						</view>
 					</view>
 				</view>
@@ -52,7 +53,7 @@
 
 
 <script>
-	var vk = uni.vk;
+	import {addCart} from '@/utils'
 	export default {
 		data() {
 			// 页面数据变量
@@ -131,9 +132,19 @@
 			clickSwiper(index){
 				this.pageTo('/pages/detail/detail?_id=' + this.swipperList[index].product_id)
 			},
-			pageTo(path){
-				vk.navigateTo(path);
-			}
+			clickCategory(categoryId){
+				//跳转到tarbar的时候调用的是wx.switchTab: url 不支持query传递参数。可以先把参数存放在
+				//store中，目标页面在store中获取
+				vk.setVuex('$category.categoryId',categoryId)
+				this.pageTo('/pages/category/category')
+			},
+			clickProduct(index) {
+				this.pageTo('/pages/detail/detail?_id=' + index)
+			},
+			clickShoppingCart(productId) {
+				addCart(productId,10)
+				console.log(productId)
+			},
 		},
 		// 监听器
 		watch:{
@@ -146,6 +157,30 @@
 	}
 </script>
 <style lang="scss" scoped>
-	
-	
+	.search-wrap,
+	.swiper-wrap,
+	.category-wrap{
+		margin-bottom: 20rpx;
+	}
+	.category-wrap{
+		.grid-text{
+			height: 32rpx;
+			font-size: 28rpx;
+			margin-top: 4rpx;
+			color: $u-tips-color;
+		}
+	}
+	.product-wrap{
+		.product-title{
+			display: flex;
+			margin: 10px 0;
+			align-items: center;
+			.product-title-txt{
+				color: $u-main-color;
+				text-align: center;
+				flex: 1;
+				font-size: 36rpx;
+			}
+		}
+	}
 </style>

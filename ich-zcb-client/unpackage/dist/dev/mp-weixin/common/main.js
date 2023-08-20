@@ -19,7 +19,8 @@ var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 48));
 var _appConfig = _interopRequireDefault(__webpack_require__(/*! @/app.config.js */ 42));
 var _vkUviewUi = _interopRequireDefault(__webpack_require__(/*! ./uni_modules/vk-uview-ui */ 53));
 var _vkUnicloud = _interopRequireDefault(__webpack_require__(/*! ./uni_modules/vk-unicloud */ 80));
-var _api = _interopRequireDefault(__webpack_require__(/*! @/api */ 114));
+var _api = _interopRequireDefault(__webpack_require__(/*! @/api */ 108));
+var _utils = __webpack_require__(/*! @/utils */ 549);
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 25));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -31,6 +32,7 @@ _vue.default.use(_vkUviewUi.default);
 
 //引入全局API
 _vue.default.prototype.api = _api.default;
+_vue.default.prototype.pageTo = _utils.pageTo;
 
 // 引入 vk框架前端
 _vue.default.use(_vkUnicloud.default);

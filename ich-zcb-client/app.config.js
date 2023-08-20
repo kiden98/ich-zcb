@@ -54,6 +54,7 @@ export default {
       "/pages/error/*",
       "/pages/search/*",
       "/pages/detail/*",
+      "/pages/category/*",
     ]
   },
   // 需要检查是否可以分享的页面列表(仅小程序有效)

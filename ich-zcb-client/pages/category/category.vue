@@ -11,6 +11,10 @@
 				
 			}
 		},
+		onShow() {
+			const categoryId = vk.getVuex('$category.categoryId')
+			console.log(categoryId)
+		},
 		methods: {
 			
 		}

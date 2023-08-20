@@ -1,0 +1,23 @@
+.search-wrap.data-v-57280228,
+.swiper-wrap.data-v-57280228,
+.category-wrap.data-v-57280228 {
+  margin-bottom: 20rpx;
+}
+.category-wrap .grid-text.data-v-57280228 {
+  height: 32rpx;
+  font-size: 28rpx;
+  margin-top: 4rpx;
+  color: #909399;
+}
+.product-wrap .product-title.data-v-57280228 {
+  display: flex;
+  margin: 10px 0;
+  align-items: center;
+}
+.product-wrap .product-title .product-title-txt.data-v-57280228 {
+  color: #303133;
+  text-align: center;
+  flex: 1;
+  font-size: 36rpx;
+}
+

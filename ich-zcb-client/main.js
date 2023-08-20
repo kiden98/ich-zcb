@@ -10,8 +10,9 @@ import vk from './uni_modules/vk-unicloud';
 
 //引入全局API
 import api from '@/api'
+import {pageTo} from '@/utils'
 
-// #ifndef VUE3
+//#ifndef VUE3
 import Vue from 'vue'
 
 // 引入 uView UI
@@ -21,6 +22,7 @@ Vue.use(uView);
 
 //引入全局API
 Vue.prototype.api = api
+Vue.prototype.pageTo = pageTo
 
 // 引入 vk框架前端
 Vue.use(vk);

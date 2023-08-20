@@ -572,33 +572,7 @@ function updateManagerByMP() {
 
 /***/ }),
 
-/***/ 11:
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ 12);
-function _defineProperty(obj, key, value) {
-  key = toPropertyKey(key);
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 114:
+/***/ 108:
 /*!******************************************************!*\
   !*** D:/web-app/ich-zcb/ich-zcb-client/api/index.js ***!
   \******************************************************/
@@ -615,7 +589,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 28));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 31));
-var _config = _interopRequireDefault(__webpack_require__(/*! ./config.js */ 495));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./config.js */ 109));
 var getApiObj = function getApiObj(config) {
   var apiObj = {};
   var _loop = function _loop(key) {
@@ -661,6 +635,57 @@ var getApiObj = function getApiObj(config) {
 };
 var _default = getApiObj(_config.default);
 exports.default = _default;
+
+/***/ }),
+
+/***/ 109:
+/*!*******************************************************!*\
+  !*** D:/web-app/ich-zcb/ich-zcb-client/api/config.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  //方法名:[云函数请求地址]
+  getSwipperList: ['common/swipper/pub/getList'],
+  getCategroyList: ['common/category/pub/getList'],
+  getProductList: ['common/product/pub/getList'],
+  addCart: ['common/cart/pub/add']
+};
+exports.default = _default;
+
+/***/ }),
+
+/***/ 11:
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ 12);
+function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -2338,7 +2363,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -9381,7 +9406,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -9402,14 +9427,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -9505,7 +9530,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -10419,9 +10444,9 @@ var b = "development" === "development",
         "192.168.152.1",
         "192.168.3.6"
     ],
-    "debugPort": 9001,
+    "debugPort": 9000,
     "initialLaunchType": "local",
-    "servePort": 7001,
+    "servePort": 7000,
     "skipFiles": [
         "<node_internals>/**",
         "D:/dev/HBuilderX/plugins/unicloud/**/*.js"
@@ -18192,7 +18217,7 @@ var _default = {
     * 在无需登录的页面上执行kh或sys函数，也会自动判断是否登录，未登录会自动跳登录页面，登录成功后会自动返回本来要跳转的页面。
      */
     mode: 2,
-    list: ["/pages_template/*", "/pages/login/*", "/pages/index/*", "/pages/error/*", "/pages/search/*", "/pages/detail/*"]
+    list: ["/pages_template/*", "/pages/login/*", "/pages/index/*", "/pages/error/*", "/pages/search/*", "/pages/detail/*", "/pages/category/*"]
   },
   // 需要检查是否可以分享的页面列表(仅小程序有效)
   checkSharePages: {
@@ -18273,7 +18298,184 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 421:
+/***/ 43:
+/*!**************************************************************************!*\
+  !*** D:/web-app/ich-zcb/ich-zcb-client/common/function/myPubFunction.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+/**
+ * 自定义公共函数
+ */
+var myfn = {};
+/**
+ * 测试函数test1
+ * vk.myfn.test1();
+ */
+myfn.test1 = function () {
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var vk = uni.vk;
+  console.log("执行了自定义公共函数test1");
+  return obj;
+};
+var _default = myfn;
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 44:
+/*!******************************************************!*\
+  !*** D:/web-app/ich-zcb/ich-zcb-client/package.json ***!
+  \******************************************************/
+/*! exports provided: id, displayName, version, description, keywords, main, dependencies, devDependencies, scripts, author, license, repository, name, engines, dcloudext, uni_modules, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"id\":\"vk-cloud-router\",\"displayName\":\"【开箱即用】vk-unicloud-router - 云函数路由模式开发框架 - 已集成uni-id 框架内置了众多API、工具包，为你的业务扫平障碍。\",\"version\":\"2.15.1\",\"description\":\"这是一个unicloud快速开发框架+项目模板（已包含核心库）支持URL化，众多现成API供你使用（登录、注册、短信、微信百度服务端API等等）为你的业务扫平障碍。内置小白也能轻松上手的数据库API。\",\"keywords\":[\"vk-unicloud-router\",\"云函数路由、云对象路由\",\"vk云开发\",\"内置uni-id、uview、数据库baseDao\",\"内置众多API、工具包、支持微信公众号登录、微信小程序、app登录等\"],\"main\":\"main.js\",\"dependencies\":{},\"devDependencies\":{},\"scripts\":{\"test\":\"echo \\\"Error: no test specified\\\" && exit 1\"},\"author\":\"VK\",\"license\":\"MIT\",\"repository\":\"https://gitee.com/vk-uni/vk-uni-cloud-router\",\"name\":\"vk-unicloud-router\",\"engines\":{\"HBuilderX\":\"^3.1.2\"},\"dcloudext\":{\"sale\":{\"regular\":{\"price\":\"0.00\"},\"sourcecode\":{\"price\":\"0.00\"}},\"contact\":{\"qq\":\"370725567\"},\"declaration\":{\"ads\":\"无\",\"data\":\"插件不采集任何数据\",\"permissions\":\"无\"},\"npmurl\":\"https://vkdoc.fsq.pub/client/\",\"type\":\"unicloud-template-project\"},\"uni_modules\":{\"platforms\":{\"cloud\":{\"tcb\":\"y\",\"aliyun\":\"y\"},\"client\":{\"App\":{\"app-vue\":\"y\",\"app-nvue\":\"y\"},\"H5-mobile\":{\"Safari\":\"y\",\"Android Browser\":\"y\",\"微信浏览器(Android)\":\"y\",\"QQ浏览器(Android)\":\"y\"},\"H5-pc\":{\"Chrome\":\"y\",\"IE\":\"u\",\"Edge\":\"y\",\"Firefox\":\"y\",\"Safari\":\"y\"},\"小程序\":{\"微信\":\"y\",\"阿里\":\"y\",\"百度\":\"y\",\"字节跳动\":\"y\",\"QQ\":\"y\",\"钉钉\":\"y\",\"快手\":\"y\",\"飞书\":\"y\",\"京东\":\"y\"},\"快应用\":{\"华为\":\"y\",\"联盟\":\"y\"},\"Vue\":{\"vue2\":\"y\",\"vue3\":\"y\"}}}}}");
+
+/***/ }),
+
+/***/ 47:
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
+  \**********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return normalizeComponent; });
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+function normalizeComponent (
+  scriptExports,
+  render,
+  staticRenderFns,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier, /* server only */
+  shadowMode, /* vue-cli only */
+  components, // fixed by xxxxxx auto components
+  renderjs // fixed by xxxxxx renderjs
+) {
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // fixed by xxxxxx auto components
+  if (components) {
+    if (!options.components) {
+      options.components = {}
+    }
+    var hasOwn = Object.prototype.hasOwnProperty
+    for (var name in components) {
+      if (hasOwn.call(components, name) && !hasOwn.call(options.components, name)) {
+        options.components[name] = components[name]
+      }
+    }
+  }
+  // fixed by xxxxxx renderjs
+  if (renderjs) {
+    if(typeof renderjs.beforeCreate === 'function'){
+			renderjs.beforeCreate = [renderjs.beforeCreate]
+		}
+    (renderjs.beforeCreate || (renderjs.beforeCreate = [])).unshift(function() {
+      this[renderjs.__module] = this
+    });
+    (options.mixins || (options.mixins = [])).push(renderjs)
+  }
+
+  // render functions
+  if (render) {
+    options.render = render
+    options.staticRenderFns = staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = 'data-v-' + scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = shadowMode
+      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
+      : injectStyles
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      var originalRender = options.render
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return originalRender(h, context)
+      }
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    }
+  }
+
+  return {
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+
+/***/ 476:
 /*!**************************************************************************************!*\
   !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/emitter.js ***!
   \**************************************************************************************/
@@ -18344,7 +18546,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 422:
+/***/ 477:
 /*!**********************************************************************************************!*\
   !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/async-validator.js ***!
   \**********************************************************************************************/
@@ -18379,7 +18581,7 @@ function _extends() {
 var formatRegExp = /%[sdj%]/g;
 var warning = function warning() {}; // don't print warning message when in production env or node runtime
 
-if (typeof process !== 'undefined' && Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}) && "development" !== 'production' && typeof window !== 'undefined' && typeof document !== 'undefined') {
+if (typeof process !== 'undefined' && Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}) && "development" !== 'production' && typeof window !== 'undefined' && typeof document !== 'undefined') {
   warning = function warning(type, errors) {
     if (typeof console !== 'undefined' && console.warn) {
       if (errors.every(function (e) {
@@ -19522,11 +19724,11 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../dev/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 423)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../dev/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 478)))
 
 /***/ }),
 
-/***/ 423:
+/***/ 478:
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -19557,7 +19759,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 424);
+        if (!path) path = __webpack_require__(/*! path */ 479);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -19571,7 +19773,7 @@ exports.features = {};
 
 /***/ }),
 
-/***/ 424:
+/***/ 479:
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -19881,184 +20083,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 423)))
-
-/***/ }),
-
-/***/ 43:
-/*!**************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/common/function/myPubFunction.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-/**
- * 自定义公共函数
- */
-var myfn = {};
-/**
- * 测试函数test1
- * vk.myfn.test1();
- */
-myfn.test1 = function () {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var vk = uni.vk;
-  console.log("执行了自定义公共函数test1");
-  return obj;
-};
-var _default = myfn;
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-
-/***/ 44:
-/*!******************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/package.json ***!
-  \******************************************************/
-/*! exports provided: id, displayName, version, description, keywords, main, dependencies, devDependencies, scripts, author, license, repository, name, engines, dcloudext, uni_modules, default */
-/***/ (function(module) {
-
-module.exports = JSON.parse("{\"id\":\"vk-cloud-router\",\"displayName\":\"【开箱即用】vk-unicloud-router - 云函数路由模式开发框架 - 已集成uni-id 框架内置了众多API、工具包，为你的业务扫平障碍。\",\"version\":\"2.15.1\",\"description\":\"这是一个unicloud快速开发框架+项目模板（已包含核心库）支持URL化，众多现成API供你使用（登录、注册、短信、微信百度服务端API等等）为你的业务扫平障碍。内置小白也能轻松上手的数据库API。\",\"keywords\":[\"vk-unicloud-router\",\"云函数路由、云对象路由\",\"vk云开发\",\"内置uni-id、uview、数据库baseDao\",\"内置众多API、工具包、支持微信公众号登录、微信小程序、app登录等\"],\"main\":\"main.js\",\"dependencies\":{},\"devDependencies\":{},\"scripts\":{\"test\":\"echo \\\"Error: no test specified\\\" && exit 1\"},\"author\":\"VK\",\"license\":\"MIT\",\"repository\":\"https://gitee.com/vk-uni/vk-uni-cloud-router\",\"name\":\"vk-unicloud-router\",\"engines\":{\"HBuilderX\":\"^3.1.2\"},\"dcloudext\":{\"sale\":{\"regular\":{\"price\":\"0.00\"},\"sourcecode\":{\"price\":\"0.00\"}},\"contact\":{\"qq\":\"370725567\"},\"declaration\":{\"ads\":\"无\",\"data\":\"插件不采集任何数据\",\"permissions\":\"无\"},\"npmurl\":\"https://vkdoc.fsq.pub/client/\",\"type\":\"unicloud-template-project\"},\"uni_modules\":{\"platforms\":{\"cloud\":{\"tcb\":\"y\",\"aliyun\":\"y\"},\"client\":{\"App\":{\"app-vue\":\"y\",\"app-nvue\":\"y\"},\"H5-mobile\":{\"Safari\":\"y\",\"Android Browser\":\"y\",\"微信浏览器(Android)\":\"y\",\"QQ浏览器(Android)\":\"y\"},\"H5-pc\":{\"Chrome\":\"y\",\"IE\":\"u\",\"Edge\":\"y\",\"Firefox\":\"y\",\"Safari\":\"y\"},\"小程序\":{\"微信\":\"y\",\"阿里\":\"y\",\"百度\":\"y\",\"字节跳动\":\"y\",\"QQ\":\"y\",\"钉钉\":\"y\",\"快手\":\"y\",\"飞书\":\"y\",\"京东\":\"y\"},\"快应用\":{\"华为\":\"y\",\"联盟\":\"y\"},\"Vue\":{\"vue2\":\"y\",\"vue3\":\"y\"}}}}}");
-
-/***/ }),
-
-/***/ 47:
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
-  \**********************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return normalizeComponent; });
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-function normalizeComponent (
-  scriptExports,
-  render,
-  staticRenderFns,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier, /* server only */
-  shadowMode, /* vue-cli only */
-  components, // fixed by xxxxxx auto components
-  renderjs // fixed by xxxxxx renderjs
-) {
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // fixed by xxxxxx auto components
-  if (components) {
-    if (!options.components) {
-      options.components = {}
-    }
-    var hasOwn = Object.prototype.hasOwnProperty
-    for (var name in components) {
-      if (hasOwn.call(components, name) && !hasOwn.call(options.components, name)) {
-        options.components[name] = components[name]
-      }
-    }
-  }
-  // fixed by xxxxxx renderjs
-  if (renderjs) {
-    if(typeof renderjs.beforeCreate === 'function'){
-			renderjs.beforeCreate = [renderjs.beforeCreate]
-		}
-    (renderjs.beforeCreate || (renderjs.beforeCreate = [])).unshift(function() {
-      this[renderjs.__module] = this
-    });
-    (options.mixins || (options.mixins = [])).push(renderjs)
-  }
-
-  // render functions
-  if (render) {
-    options.render = render
-    options.staticRenderFns = staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = 'data-v-' + scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = shadowMode
-      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
-      : injectStyles
-  }
-
-  if (hook) {
-    if (options.functional) {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      var originalRender = options.render
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return originalRender(h, context)
-      }
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    }
-  }
-
-  return {
-    exports: scriptExports,
-    options: options
-  }
-}
-
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 478)))
 
 /***/ }),
 
@@ -21419,30 +21444,6 @@ module.exports = index_cjs;
 
 /***/ }),
 
-/***/ 495:
-/*!*******************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/api/config.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  //方法名:[云函数请求地址]
-  getSwipperList: ['common/swipper/pub/getList'],
-  getCategroyList: ['common/category/pub/getList'],
-  getProductList: ['common/product/pub/getList']
-};
-exports.default = _default;
-
-/***/ }),
-
 /***/ 5:
 /*!**************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/slicedToArray.js ***!
@@ -21470,6 +21471,7 @@ module.exports = _slicedToArray, module.exports.__esModule = true, module.export
 
 var map = {
 	"./$app.js": 51,
+	"./$category.js": 548,
 	"./$user.js": 52
 };
 
@@ -21844,6 +21846,115 @@ var _default = {
 };
 exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 548:
+/*!********************************************************************!*\
+  !*** D:/web-app/ich-zcb/ich-zcb-client/store/modules/$category.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+/**
+ * vuex 用户状态管理模块
+ */
+var lifeData = uni.getStorageSync('lifeData') || {};
+var $category = lifeData.$category || {};
+var _default = {
+  // 通过添加 namespaced: true 的方式使其成为带命名空间的模块
+  namespaced: true,
+  /**
+   * vuex的基本数据，用来存储变量
+   */
+  state: {
+    categoryId: $category.categoryId || ""
+  },
+  /**
+   * 从基本数据(state)派生的数据，相当于state的计算属性
+   */
+  getters: {},
+  /**
+   * 提交更新数据的方法，必须是同步的(如果需要异步使用action)。
+   * 每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
+   * 回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数，提交载荷作为第二个参数。
+   */
+  mutations: {},
+  /**
+   * 和mutation的功能大致相同，不同之处在于 ==》
+   * 1. Action 提交的是 mutation，而不是直接变更状态。 
+   * 2. Action 可以包含任意异步操作。
+   */
+  actions: {}
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 549:
+/*!********************************************************!*\
+  !*** D:/web-app/ich-zcb/ich-zcb-client/utils/index.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addCart = addCart;
+exports.pageTo = pageTo;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 28));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 31));
+var _api = _interopRequireDefault(__webpack_require__(/*! @/api */ 108));
+function pageTo(path) {
+  vk.navigateTo(path);
+}
+
+//异步的方法
+function addCart(_x, _x2) {
+  return _addCart.apply(this, arguments);
+}
+function _addCart() {
+  _addCart = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(productId, productNum) {
+    return _regenerator.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (vk.checkToken()) {
+              _context.next = 5;
+              break;
+            }
+            vk.navigateTo('/pages/me/me');
+            return _context.abrupt("return");
+          case 5:
+            _context.next = 7;
+            return _api.default.addCart({
+              productId: productId,
+              productNum: productNum
+            });
+          case 7:
+            vk.toast("添加成功", "success");
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _addCart.apply(this, arguments);
+}
 
 /***/ }),
 

@@ -42,4 +42,7 @@
 	// @import "./uni_modules/vk-uview-ui/index.scss";
   @import "./uni_modules/vk-uview-ui/index.scss";
   @import "./common/css/app.scss";
+  page{
+	  background: $u-pg-bg-color;
+  }
 </style>
