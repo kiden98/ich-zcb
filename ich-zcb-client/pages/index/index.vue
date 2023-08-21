@@ -6,13 +6,15 @@
 		<view class="swiper-wrap">
 			<u-swiper :list="swipperList" @click="clickSwiper()"></u-swiper>	
 		</view>
-		<view class="category-wrap">
+		<view class="category-wrap u-skeleton">
 			<u-grid :col="4" :border="false">
 				<u-grid-item v-for="(category,index) in categoryList" :key="index" @click="clickCategory(category._id)">
-					<u-image :src="category.image" width="150" height="150"></u-image>
-					<view class="grid-text">{{category.name}}</view>
+					<u-image :src="category.image" width="150" height="150" class="u-skeleton-rect"></u-image>
+					<view class="grid-text u-skeleton-rect">{{category.name}}</view>
 				</u-grid-item>
 			</u-grid>
+			<!--引用骨架屏-->
+			<u-skeleton :loading="categorySkeletonloading" :animation="true" bgColor="#FFF"></u-skeleton>
 		</view>
 		<view class="product-wrap">
 			<view class="product-title">
@@ -25,12 +27,13 @@
 			<view class="product-list">
 				<view class="product-item" v-for="(item,index) in productList" :key="index" @click="clickProduct(item._id)">
 					<u-lazy-load threshold="300" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
-					<view class="product-name">
+					<view class="product-name line2">
 						{{item.name ||""}}
 					</view>
 					<view class="product-price">
 						<view class="product-price-txt">
-							{{item.price || 0}}
+							<!-- vue 过滤器格式 {{值 | 过滤器}} -->
+							{{item.price | formatPrice}}
 						</view>
 						<view class="product-sales">
 							已售{{item.sales || 0}}
@@ -38,7 +41,7 @@
 					</view>
 					<view class="product-ot-price">
 						<view class="product-ot-price-txt">
-							{{item.ot_price || 0}}
+							{{item.ot_price | formatPrice}}
 						</view>
 						<view class="shopping-cart">
 							<!--这里的点击会冒泡到上一层的click事件，所以不能用@click，需要用@tap.stop -->
@@ -46,7 +49,8 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</view>			
+			<u-loadmore :status="productLoadStatus" bg-color="$u-light-color" @loadmore="loadProduct"/>
 		</view>
 	</view>
 </template>
@@ -59,10 +63,14 @@
 			// 页面数据变量
 			return {
 				//定义页面上保存云函数查询返回的数据变量
+				categorySkeletonloading:true,
 				swipperList:[],
-				categoryList:[],
+				//初始化8个骨架屏
+				categoryList: Array(4).fill({}),
 				productList:[],
-				
+				productPageIndex:1,
+				productHasMore: true,
+				productLoadStatus: 'loadmore'
 			}
 		},
 		onPageScroll(e) {
@@ -74,7 +82,9 @@
 			this.options = options;
 			this.init(options);
 		},
-		
+		onReachBottom() {
+			this.loadProduct()
+		},
 		// 函数
 		methods: {
 			// 页面数据初始化函数
@@ -111,10 +121,15 @@
 						]
 					})
 				this.categoryList = res.rows
+				//数据加载完成后隐藏骨架屏
+				this.categorySkeletonloading  = false
 			},
 			
 			//获取分类
-			async loadProduct(){				
+			async loadProduct(){
+				if(! this.productHasMore) {
+					return
+				}
 				const res = await this.api.getProductList({
 						// 查询表单数据源，可在此设置默认值
 						formData:{
@@ -125,9 +140,20 @@
 						columns:[
 							{ key:"is_hot",  mode:"="},
 							{ key:"is_sale",  mode:"="},
-						]
+						],
+						pageSize: 4,
+						pageIndex: this.productPageIndex,
 					})
-				this.productList = res.rows
+				if(!res.hasMore) {
+					this.productLoadStatus = 'nomore'
+				}
+				if(this.productPageIndex == 1) {
+					this.productList = res.rows
+				} else {
+					this.productList = this.productList.concat(res.rows)
+				}
+				this.productHasMore = res.hasMore
+				this.productPageIndex += 1
 			},
 			clickSwiper(index){
 				this.pageTo('/pages/detail/detail?_id=' + this.swipperList[index].product_id)
@@ -180,6 +206,56 @@
 				text-align: center;
 				flex: 1;
 				font-size: 36rpx;
+			}
+		}
+		.product-list{
+			//水平显示
+			display: flex;
+			//项目均匀分布在行中，周围空间相等
+			justify-content: space-around;
+			//主轴显示不下时，自动换行
+			flex-wrap: wrap;
+			.product-item{
+				width: 48%;
+				border-radius: 10rpx;
+				margin: 5px 0;
+				background-color: $u-primary-bg-color;
+				padding: 8px;
+				.product-name{
+					width: 100%;
+					font-size: 30rpx;
+					margin-top: 5px;
+					color: $u-main-color;					
+				}
+				.product-price{
+					margin-top: 5px;
+					display: flex;
+					//沿着交叉轴方向，按照项目内的文字对齐
+					align-items: baseline;
+					justify-content: space-between;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					.product-price-txt{
+						font-size: 36rpx;
+						color: $u-primary-price-color;
+					}
+					.product-sales{
+						margin-left: 10rpx;
+						font-size: 30rpx;
+						color: $u-tips-color;
+						
+					}
+				}
+				.product-ot-price{
+					margin-top: 5px;
+					display: flex;
+					justify-content: space-between;
+					.product-ot-price-txt{
+						color: $u-light-color;
+						text-decoration: line-through;
+					}
+				}
 			}
 		}
 	}

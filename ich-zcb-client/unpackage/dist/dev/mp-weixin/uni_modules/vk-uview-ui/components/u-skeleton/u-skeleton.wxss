@@ -1,0 +1,36 @@
+.skeleton-fade.data-v-7f9871eb {
+  width: 100%;
+  height: 100%;
+  background: #c2cfd6;
+  -webkit-animation-duration: 1.5s;
+          animation-duration: 1.5s;
+  -webkit-animation-name: blink-data-v-7f9871eb;
+          animation-name: blink-data-v-7f9871eb;
+  -webkit-animation-timing-function: ease-in-out;
+          animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+@-webkit-keyframes blink-data-v-7f9871eb {
+0% {
+    opacity: 1;
+}
+50% {
+    opacity: 0.4;
+}
+100% {
+    opacity: 1;
+}
+}
+@keyframes blink-data-v-7f9871eb {
+0% {
+    opacity: 1;
+}
+50% {
+    opacity: 0.4;
+}
+100% {
+    opacity: 1;
+}
+}
+

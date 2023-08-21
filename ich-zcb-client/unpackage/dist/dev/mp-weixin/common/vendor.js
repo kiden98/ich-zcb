@@ -59,9 +59,455 @@ module.exports = _nonIterableRest, module.exports.__esModule = true, module.expo
 /***/ }),
 
 /***/ 100:
-/*!******************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.importObject.js ***!
-  \******************************************************************************************************************************/
+/*!****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.request.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+var requestUtil = {};
+requestUtil.config = {
+  // 请求配置
+  request: {
+    // 公共请求参数(每次请求都会带上的参数)
+    dataParam: {}
+  },
+  requestGlobalParamKeyName: "vk_url_request_global_param",
+  debug: "development" !== "production",
+  // 日志风格
+  logger: {
+    colorArr: ["#0095ff", "#67C23A"]
+  }
+};
+var counterNum = 0;
+/**
+ * request 请求库
+ * 注意: 该请求库目前主要是框架自身使用，且近期变动频率较高，目前请勿使用在你自己的业务中。
+ * @param {String} url                服务器接口地址
+ * @param {Object/String/ArrayBuffer} data 请求的参数                                      App（自定义组件编译模式）不支持ArrayBuffer类型
+ * @param {Object} header             设置请求的 header，header 中不能设置 Referer。         App、H5端会自动带上cookie，且H5端不可手动修改
+ * @param {String} method             默认 POST 可选 GET
+ * @param {Number} timeout            超时时间，单位 ms 默认3000(30秒)
+ * @param {String} dataType           默认json 如果设为 json，会尝试对返回的数据做一次 JSON.parse
+ * @param {String} responseType       默认 text 设置响应的数据类型。合法值：text、arraybuffer App和支付宝小程序不支持
+ * @param {Boolean} sslVerify         默认 true 是否需要验证ssl证书 仅App安卓端支持（HBuilderX 2.3.3+）          仅App安卓端支持（HBuilderX 2.3.3+）
+ * @param {Boolean} withCredentials   默认 false 跨域请求时是否携带凭证（cookies）            仅H5支持（HBuilderX 2.6.15+）
+ * @param {Boolean} firstIpv4         默认 false DNS解析时优先使用ipv4                       仅 App-Android 支持 (HBuilderX 2.8.0+)
+ * @param {String} success            成功回调
+ * @param {String} fail               失败回调
+ * @param {String} complete           完成回调
+ * 以下为特殊参数
+ * @param {String} errorCodeName      服务器返回的错误码的字段名，若不为空，则会对返回结果进行判断
+ * @param {String} errorMsgName       服务器返回的错误码的字符串含义，若不为空，且errorCodeName对应的值不为0，则会alert弹窗
+ * @param {Boolean} needAlert         服务器返回的错误时，是否需要alert弹出提示
+ *
+ * 调用示例
+vk.request({
+	url: `https://www.xxx.com/api/xxxx`,
+	method:"POST",
+	header:{
+		"content-type": "application/json; charset=utf-8",
+	},
+	data:{
+
+	},
+	success: function(data){
+
+	},
+	fail: function(err){
+
+	}
+});
+ */
+
+requestUtil.request = function () {
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var vk = uni.vk;
+  // 去除值为 undefined 的参数
+  if ((0, _typeof2.default)(obj.data) === "object") {
+    obj.data = vk.pubfn.copyObject(obj.data);
+  }
+  // 注入自定义全局参数开始-----------------------------------------------------------
+  var config = requestUtil.config;
+  var globalParam = uni.getStorageSync(config.requestGlobalParamKeyName) || {};
+  // 根据正则规格自动匹配全局请求参数
+  for (var i in globalParam) {
+    var _customDate = globalParam[i];
+    if (_customDate.regExp) {
+      if ((0, _typeof2.default)(_customDate.regExp) === "object") {
+        // 数组形式
+        for (var _i = 0; _i < _customDate.regExp.length; _i++) {
+          var regExp = new RegExp(_customDate.regExp[_i]);
+          if (regExp.test(obj.url)) {
+            obj.data = Object.assign(_customDate.data, obj.data);
+            break;
+          }
+        }
+      } else {
+        // 字符串形式
+        var _regExp = new RegExp(_customDate.regExp);
+        if (_regExp.test(obj.url)) {
+          obj.data = Object.assign(_customDate.data, obj.data);
+        }
+      }
+    }
+  }
+  // 根据指定globalParamName匹配全局请求参数
+  var customDate = requestUtil.getRequestGlobalParam(obj.globalParamName);
+  if (customDate && JSON.stringify(customDate) !== "{}") {
+    if (customDate.regExp) {
+      obj.data = Object.assign(customDate.data, obj.data); // 新版本
+    } else {
+      obj.data = Object.assign(customDate, obj.data); // 兼容旧版本
+    }
+  }
+  // 注入自定义全局参数结束-----------------------------------------------------------
+
+  if (!obj.method) obj.method = "POST"; // 默认POST请求
+  if (typeof obj.dataType === "undefined") obj.dataType = "json";
+  if (obj.dataType == "default" || obj.dataType === "") delete obj.dataType;
+  if (typeof obj.header === "undefined" && typeof obj.headers !== "undefined") {
+    obj.header = obj.headers;
+  }
+
+  // 自动注入token到请求头开始-----------------------------------------------------------
+  // 注意：自2.15.1开始，需要手动指定uniIdToken: true 才会自动添加token到请求头里
+  if (typeof vk.getToken === "function" && obj.uniIdToken) {
+    var uni_id_token;
+    if (obj.uniIdToken === true) {
+      uni_id_token = vk.getToken();
+    } else if (typeof obj.uniIdToken === "boolean") {
+      uni_id_token = obj.uniIdToken;
+    }
+    if (uni_id_token) {
+      if (!obj.header) obj.header = {};
+      obj.header["uni-id-token"] = uni_id_token;
+    }
+  }
+  // 自动注入token到请求头结束-----------------------------------------------------------
+  var interceptor = obj.interceptor;
+  delete obj.interceptor;
+  if (interceptor && typeof interceptor.invoke === "function") {
+    var interceptorRes = interceptor.invoke(obj);
+    if (interceptorRes === false) {
+      return;
+    }
+  }
+  if (typeof obj.timeout === "undefined") obj.timeout = 30000; // 超时时间，单位 ms(默认30秒)
+  var Logger = {};
+  if (config.debug) {
+    Logger.params = (0, _typeof2.default)(obj.data) == "object" ? vk.pubfn.copyObject(obj.data) : obj.data;
+    Logger.startTime = new Date().getTime();
+    var url = obj.url;
+    var path = obj.url.split("?")[0];
+    path = path.substring(path.indexOf("://") + 3);
+    Logger.domainName = path.substring(0, path.indexOf("/"));
+    Logger.action = path.substring(path.indexOf("/") + 1);
+    Logger.url = url;
+  }
+  if (obj.title) vk.showLoading(obj.title);
+  if (obj.loading) vk.setLoading(true, obj.loading);
+  var promiseAction = new Promise(function (resolve, reject) {
+    uni.request(_objectSpread(_objectSpread({}, obj), {}, {
+      success: function success(res) {
+        if (interceptor && typeof interceptor.success === "function") {
+          var _interceptorRes = interceptor.success(res);
+          if (_interceptorRes === false) {
+            return;
+          }
+        }
+        requestSuccess({
+          res: res,
+          params: obj,
+          Logger: Logger,
+          resolve: resolve,
+          reject: reject
+        });
+      },
+      fail: function fail(res) {
+        if (interceptor && typeof interceptor.fail === "function") {
+          var _interceptorRes2 = interceptor.fail(res);
+          if (_interceptorRes2 === false) {
+            return;
+          }
+        }
+        requestFail({
+          res: res,
+          params: obj,
+          Logger: Logger,
+          reject: reject
+        });
+      },
+      complete: function complete(res) {
+        if (interceptor && typeof interceptor.complete === "function") {
+          var _interceptorRes3 = interceptor.complete(res);
+          if (_interceptorRes3 === false) {
+            return;
+          }
+        }
+        requestComplete({
+          res: res,
+          params: obj,
+          Logger: Logger
+        });
+      }
+    }));
+  });
+  promiseAction.catch(function (error) {});
+  return promiseAction;
+};
+// 请求成功回调
+function requestSuccess() {
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var vk = uni.vk;
+  var config = requestUtil.config;
+  var _obj$res = obj.res,
+    res = _obj$res === void 0 ? {} : _obj$res,
+    params = obj.params,
+    Logger = obj.Logger,
+    resolve = obj.resolve,
+    reject = obj.reject;
+  var title = params.title,
+    needOriginalRes = params.needOriginalRes,
+    dataType = params.dataType,
+    errorCodeName = params.errorCodeName,
+    errorMsgName = params.errorMsgName,
+    success = params.success,
+    loading = params.loading;
+  var data = res.data || {};
+  if (vk.pubfn.isNotNullAll(errorCodeName, data[errorCodeName])) {
+    data.code = data[errorCodeName];
+    delete data[errorCodeName];
+  }
+  if (vk.pubfn.isNotNullAll(errorMsgName, data[errorMsgName])) {
+    data.msg = data[errorMsgName];
+    if (typeof data[errorMsgName] === "string") {
+      delete data[errorMsgName];
+    }
+  }
+  if (config.debug) Logger.result = (0, _typeof2.default)(data) == "object" ? vk.pubfn.copyObject(data) : data;
+  if ([1301, 1302, 30201, 30202, 30203, 30204].indexOf(data.code) > -1 && data.msg.indexOf("token") > -1) {
+    // 执行 login 拦截器函数（跳转到页面页面）
+    var _vk$callFunctionUtil$ = vk.callFunctionUtil.interceptor,
+      interceptor = _vk$callFunctionUtil$ === void 0 ? {} : _vk$callFunctionUtil$;
+    if (typeof interceptor.login === "function") {
+      interceptor.login({
+        res: data,
+        params: params,
+        vk: vk
+      });
+    }
+    reject(data);
+  } else if (res.statusCode >= 400 || data.code) {
+    requestFail({
+      res: data,
+      params: params,
+      Logger: Logger,
+      reject: reject
+    });
+  } else {
+    if (title) vk.hideLoading();
+    if (loading) vk.setLoading(false, loading);
+    if (needOriginalRes) data.originalRes = vk.pubfn.copyObject(res);
+    if (data.vk_uni_token) vk.callFunctionUtil.saveToken(data.vk_uni_token);
+    if (data.userInfo && data.needUpdateUserInfo) vk.callFunctionUtil.updateUserInfo(data);
+    if (typeof success === "function") success(data);
+    if (typeof resolve === "function") resolve(data);
+  }
+}
+
+// 请求失败回调
+function requestFail() {
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var vk = uni.vk;
+  var config = requestUtil.config;
+  var _obj$res2 = obj.res,
+    res = _obj$res2 === void 0 ? {} : _obj$res2,
+    params = obj.params,
+    Logger = obj.Logger,
+    reject = obj.reject;
+  var title = params.title,
+    needAlert = params.needAlert,
+    fail = params.fail,
+    loading = params.loading;
+  if (typeof needAlert === "undefined") {
+    needAlert = typeof fail === "function" ? false : true;
+  }
+  var errMsg = "";
+  var sysErr = false;
+  if (typeof res.code !== "undefined") {
+    errMsg = res.msg;
+  } else {
+    sysErr = true;
+    errMsg = JSON.stringify(res);
+  }
+  if (errMsg.indexOf("fail timeout") > -1) {
+    sysErr = true;
+    errMsg = "请求超时，请重试！";
+  }
+  if (config.debug) Logger.error = res;
+  if (title) vk.hideLoading();
+  if (loading) vk.setLoading(false, loading);
+  var runKey = true;
+  // 自定义拦截器开始-----------------------------------------------------------
+  var _vk$callFunctionUtil$2 = vk.callFunctionUtil.getConfig(),
+    _vk$callFunctionUtil$3 = _vk$callFunctionUtil$2.interceptor,
+    interceptor = _vk$callFunctionUtil$3 === void 0 ? {} : _vk$callFunctionUtil$3;
+  if (interceptor.request && typeof interceptor.request.fail == "function") {
+    runKey = interceptor.request.fail({
+      vk: vk,
+      res: res,
+      params: params
+    });
+    if (runKey === undefined) runKey = true;
+  }
+  // 自定义拦截器结束-----------------------------------------------------------
+  if (runKey) {
+    if (needAlert && vk.pubfn.isNotNull(errMsg)) {
+      if (sysErr) {
+        vk.toast("网络开小差了！", "none");
+      } else {
+        vk.alert(errMsg);
+      }
+    }
+    if (typeof fail === "function") fail(res);
+    if (typeof reject === "function") reject(res);
+  }
+}
+
+// 请求完成回调
+function requestComplete() {
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var vk = uni.vk;
+  var config = requestUtil.config;
+  var _obj$res3 = obj.res,
+    res = _obj$res3 === void 0 ? {} : _obj$res3,
+    params = obj.params,
+    Logger = obj.Logger;
+  var title = params.title,
+    needOriginalRes = params.needOriginalRes,
+    complete = params.complete;
+  if (config.debug) {
+    Logger.endTime = new Date().getTime();
+    Logger.runTime = Logger.endTime - Logger.startTime;
+    var colorArr = config.logger.colorArr;
+    var colorStr = colorArr[counterNum % colorArr.length];
+    counterNum++;
+    console.log("%c--------【开始】【服务器请求】【" + Logger.action + "】--------", 'color: ' + colorStr + ';font-size: 12px;font-weight: bold;');
+    console.log("【请求地址】: ", Logger.url);
+    console.log("【请求参数】: ", Logger.params);
+    console.log("【返回数据】: ", Logger.result);
+    console.log("【请求状态】: ", res.statusCode, "【http状态码】");
+    console.log("【总体耗时】: ", Logger.runTime, "毫秒【含页面渲染】");
+    console.log("【请求时间】: ", vk.pubfn.timeFormat(Logger.startTime, "yyyy-MM-dd hh:mm:ss"));
+    if (Logger.error) {
+      var errorLog = console.warn || console.error;
+      if (Logger.error.err && Logger.error.err.stack) {
+        console.error("【Error】: ", Logger.error);
+        console.error("【Stack】: ", Logger.error.err.stack);
+      } else {
+        errorLog("【Error】: ", Logger.error);
+      }
+    }
+    console.log("%c--------【结束】【服务器请求】【" + Logger.action + "】--------", 'color: ' + colorStr + ';font-size: 12px;font-weight: bold;');
+  }
+  var data = res.data;
+  if (needOriginalRes) data.originalRes = vk.pubfn.copyObject(res);
+  if (typeof complete === "function") complete(data);
+}
+
+/**
+ * 修改请求配置中的公共请求参数
+ * 若把shop-manage改成*则代表全局
+	vk.requestUtil.updateRequestGlobalParam({
+		"shop-manage":{
+			regExp:"^xxx/kh/",
+			data:{
+				shop_id : shop_id
+			}
+		}
+	});
+	对应的request中增加参数globalParamName:"shop-manage"
+	vk.request({
+		url: 'xxx/xxxxxx',
+		title: '请求中...',
+		globalParamName:"shop-manage",// 如果设置了正则规则,则不需要此参数
+		data: {},
+		success(data) {
+		}
+	});
+ */
+requestUtil.updateRequestGlobalParam = function () {
+  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var setKey = arguments.length > 1 ? arguments[1] : undefined;
+  var vk = uni.vk;
+  var config = requestUtil.config;
+  if (setKey) {
+    // 覆盖对象
+    config.request.dataParam = data;
+  } else {
+    // 覆盖参数(有就覆盖,没有则新增)
+    config.request.dataParam = Object.assign(config.request.dataParam, data);
+  }
+  vk.setStorageSync(config.requestGlobalParamKeyName, config.request.dataParam);
+};
+
+/**
+ * 获取请求配置中的公共请求参数
+	vk.requestUtil.getRequestGlobalParam();
+ */
+requestUtil.getRequestGlobalParam = function () {
+  var globalParamName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "*";
+  var vk = uni.vk;
+  var config = requestUtil.config;
+  var data = config.request.dataParam;
+  if (!data || JSON.stringify(data) === "{}") {
+    data = uni.getStorageSync(config.requestGlobalParamKeyName) || {};
+    config.request.dataParam = data;
+  }
+  var param = data[globalParamName] || {};
+  return JSON.parse(JSON.stringify(param));
+};
+
+/**
+ * 删除请求配置中的公共请求参数
+ * globalParamName 不传代表删除所有
+	vk.requestUtil.deleteRequestGlobalParam(globalParamName);
+ */
+requestUtil.deleteRequestGlobalParam = function (globalParamName) {
+  var vk = uni.vk;
+  var config = requestUtil.config;
+  var globalParam = uni.getStorageSync(config.requestGlobalParamKeyName) || {};
+  if (globalParamName) {
+    delete globalParam[globalParamName];
+  } else {
+    globalParam = {};
+  }
+  config.request.dataParam = globalParam;
+  vk.setStorageSync(config.requestGlobalParamKeyName, globalParam);
+};
+var _default = requestUtil;
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 101:
+/*!*********************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.importObject.js ***!
+  \*********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -153,10 +599,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 101:
-/*!*************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.filters.js ***!
-  \*************************************************************************************************************************/
+/***/ 102:
+/*!****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.filters.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -168,7 +614,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _index = _interopRequireDefault(__webpack_require__(/*! ./index.js */ 85));
+var _index = _interopRequireDefault(__webpack_require__(/*! ./index.js */ 86));
 /**
  * vk.filters
  * 全局过滤器
@@ -237,10 +683,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 102:
-/*!*****************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/mixin/mixin.js ***!
-  \*****************************************************************************************************************/
+/***/ 103:
+/*!********************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/mixin/mixin.js ***!
+  \********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -306,10 +752,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 103:
-/*!*************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/permission.js ***!
-  \*************************************************************************************************************************/
+/***/ 104:
+/*!****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/permission.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -333,10 +779,10 @@ function _default(Vue) {
 
 /***/ }),
 
-/***/ 104:
-/*!***********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/store/mixin/mixin.js ***!
-  \***********************************************************************************************************************/
+/***/ 105:
+/*!**************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/store/mixin/mixin.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -423,10 +869,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 105:
-/*!**********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/store/libs/error.js ***!
-  \**********************************************************************************************************************/
+/***/ 106:
+/*!*************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/store/libs/error.js ***!
+  \*************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -464,10 +910,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 106:
-/*!*************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/install/console.log.js ***!
-  \*************************************************************************************************************************/
+/***/ 107:
+/*!****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/install/console.log.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -498,10 +944,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 107:
-/*!****************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/updateManager.js ***!
-  \****************************************************************************************************************************/
+/***/ 108:
+/*!*******************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/updateManager.js ***!
+  \*******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -572,10 +1018,10 @@ function updateManagerByMP() {
 
 /***/ }),
 
-/***/ 108:
-/*!******************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/api/index.js ***!
-  \******************************************************/
+/***/ 109:
+/*!*********************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/api/index.js ***!
+  \*********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -589,7 +1035,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 28));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 31));
-var _config = _interopRequireDefault(__webpack_require__(/*! ./config.js */ 109));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./config.js */ 110));
 var getApiObj = function getApiObj(config) {
   var apiObj = {};
   var _loop = function _loop(key) {
@@ -638,31 +1084,6 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 109:
-/*!*******************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/api/config.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  //方法名:[云函数请求地址]
-  getSwipperList: ['common/swipper/pub/getList'],
-  getCategroyList: ['common/category/pub/getList'],
-  getProductList: ['common/product/pub/getList'],
-  addCart: ['common/cart/pub/add']
-};
-exports.default = _default;
-
-/***/ }),
-
 /***/ 11:
 /*!***************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
@@ -686,6 +1107,90 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 110:
+/*!**********************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/api/config.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  //方法名:[云函数请求地址]
+  getSwipperList: ['common/swipper/pub/getList'],
+  getCategroyList: ['common/category/pub/getList'],
+  getProductList: ['common/product/pub/getList'],
+  addCart: ['common/cart/pub/add']
+};
+exports.default = _default;
+
+/***/ }),
+
+/***/ 111:
+/*!***********************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/utils/index.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addCart = addCart;
+exports.pageTo = pageTo;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 28));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 31));
+var _api = _interopRequireDefault(__webpack_require__(/*! @/api */ 109));
+function pageTo(path) {
+  vk.navigateTo(path);
+}
+
+//异步的方法
+function addCart(_x, _x2) {
+  return _addCart.apply(this, arguments);
+}
+function _addCart() {
+  _addCart = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(productId, productNum) {
+    return _regenerator.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (vk.checkToken()) {
+              _context.next = 5;
+              break;
+            }
+            vk.navigateTo('/pages/me/me');
+            return _context.abrupt("return");
+          case 5:
+            _context.next = 7;
+            return _api.default.addCart({
+              productId: productId,
+              productNum: productNum
+            });
+          case 7:
+            vk.toast("添加成功", "success");
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _addCart.apply(this, arguments);
+}
 
 /***/ }),
 
@@ -2363,7 +2868,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -9406,7 +9911,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -9427,14 +9932,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -9530,7 +10035,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -9950,9 +10455,9 @@ internalMixin(Vue);
 /***/ }),
 
 /***/ 26:
-/*!****************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/pages.json ***!
-  \****************************************************/
+/*!*******************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/pages.json ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -10440,16 +10945,15 @@ var b = "development" === "development",
   A = S({
     "address": [
         "127.0.0.1",
-        "192.168.200.1",
-        "192.168.152.1",
-        "192.168.3.6"
+        "192.168.1.77",
+        "192.168.56.1"
     ],
     "debugPort": 9000,
     "initialLaunchType": "local",
     "servePort": 7000,
     "skipFiles": [
         "<node_internals>/**",
-        "D:/dev/HBuilderX/plugins/unicloud/**/*.js"
+        "E:/HBuilderX/plugins/unicloud/**/*.js"
     ]
 }
 ),
@@ -17876,9 +18380,9 @@ module.exports = _isNativeFunction, module.exports.__esModule = true, module.exp
 /***/ }),
 
 /***/ 37:
-/*!*********************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/pages.json?{"type":"origin-pages-json"} ***!
-  \*********************************************************************************/
+/*!************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/pages.json?{"type":"origin-pages-json"} ***!
+  \************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18120,9 +18624,9 @@ exports.default = _default;
 /***/ }),
 
 /***/ 38:
-/*!********************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/pages.json?{"type":"stat"} ***!
-  \********************************************************************/
+/*!***********************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/pages.json?{"type":"stat"} ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18157,9 +18661,9 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /***/ }),
 
 /***/ 42:
-/*!*******************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/app.config.js ***!
-  \*******************************************************/
+/*!**********************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/app.config.js ***!
+  \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18299,9 +18803,9 @@ exports.default = _default;
 /***/ }),
 
 /***/ 43:
-/*!**************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/common/function/myPubFunction.js ***!
-  \**************************************************************************/
+/*!*****************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/common/function/myPubFunction.js ***!
+  \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18333,9 +18837,9 @@ exports.default = _default;
 /***/ }),
 
 /***/ 44:
-/*!******************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/package.json ***!
-  \******************************************************/
+/*!*********************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/package.json ***!
+  \*********************************************************/
 /*! exports provided: id, displayName, version, description, keywords, main, dependencies, devDependencies, scripts, author, license, repository, name, engines, dcloudext, uni_modules, default */
 /***/ (function(module) {
 
@@ -18475,10 +18979,110 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 476:
-/*!**************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/emitter.js ***!
-  \**************************************************************************************/
+/***/ 48:
+/*!***********************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/store/index.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 25));
+var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 49));
+// 定义不需要永久存储的目录，即下次APP启动数据会自动清空，值为在modules目录下的文件名
+var notSaveStateKeys = ['$error'];
+
+/* 以下代码请勿改动，除非你知道改动带来的效果 */
+
+var modulesTemp = {};
+var lifeData = uni.getStorageSync('lifeData') || {};
+var modulesFiles = __webpack_require__(50);
+modulesFiles.keys().map(function (modulePath, index) {
+  var moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1');
+  modulesTemp[moduleName] = modulesFiles(modulePath).default;
+});
+var modules = {};
+for (var moduleName in modulesTemp) {
+  var moduleItem = modulesTemp[moduleName];
+  if (moduleItem && moduleItem.namespaced) {
+    var moduleNameArr = moduleName.split("/");
+    var lastName = moduleNameArr[moduleNameArr.length - 1];
+    if (lastName === "index") {
+      moduleName = moduleName.replace(/\/index$/, '');
+    }
+    modules[moduleName] = moduleItem;
+  }
+}
+for (var _moduleName in modules) {
+  if (notSaveStateKeys.indexOf(_moduleName) === -1) {
+    if (!lifeData[_moduleName]) lifeData[_moduleName] = {};
+  }
+}
+uni.setStorageSync('lifeData', lifeData);
+
+// 保存变量到本地存储中
+var saveLifeData = function saveLifeData(key, value) {
+  // 判断变量名是否在需要存储的数组中
+  if (notSaveStateKeys.indexOf(key) === -1) {
+    // 获取本地存储的lifeData对象，将变量添加到对象中
+    var tmp = uni.getStorageSync('lifeData');
+    // 第一次打开APP，不存在lifeData变量，故放一个{}空对象
+    tmp = tmp ? tmp : {};
+    tmp[key] = value;
+    // 执行这一步后，所有需要存储的变量，都挂载在本地的lifeData对象中
+    uni.setStorageSync('lifeData', tmp);
+  }
+};
+_vue.default.use(_vuex.default);
+var store = new _vuex.default.Store({
+  modules: modules,
+  // 如果是开发环境,则开启严格模式
+  strict: "development" === 'development',
+  // 公共 mutations
+  mutations: {
+    updateStore: function updateStore(state, payload) {
+      // 判断是否多层级调用，state中为对象存在的情况，诸如user.info.score = 1
+      if (typeof payload.value === "undefined") payload.value = "";
+      var nameArr = payload.name.split('.');
+      var saveKey = '';
+      var len = nameArr.length;
+      if (len >= 2) {
+        var obj = state[nameArr[0]];
+        for (var i = 1; i < len - 1; i++) {
+          var keyName = nameArr[i];
+          if ((0, _typeof2.default)(obj[keyName]) !== "object") obj[keyName] = {};
+          obj = obj[keyName];
+        }
+        obj[nameArr[len - 1]] = JSON.parse(JSON.stringify(payload.value));
+        saveKey = nameArr[0];
+      } else {
+        // 单层级变量，在state就是一个普通变量的情况
+        state[payload.name] = JSON.parse(JSON.stringify(payload.value));
+        saveKey = payload.name;
+      }
+      // 保存变量到本地，见顶部函数定义
+      saveLifeData(saveKey, state[saveKey]);
+    }
+  }
+});
+var _default = store;
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 480:
+/*!*****************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/emitter.js ***!
+  \*****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18546,10 +19150,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 477:
-/*!**********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/async-validator.js ***!
-  \**********************************************************************************************/
+/***/ 481:
+/*!*************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/util/async-validator.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18581,7 +19185,7 @@ function _extends() {
 var formatRegExp = /%[sdj%]/g;
 var warning = function warning() {}; // don't print warning message when in production env or node runtime
 
-if (typeof process !== 'undefined' && Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}) && "development" !== 'production' && typeof window !== 'undefined' && typeof document !== 'undefined') {
+if (typeof process !== 'undefined' && Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"ich-zcb-client","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}) && "development" !== 'production' && typeof window !== 'undefined' && typeof document !== 'undefined') {
   warning = function warning(type, errors) {
     if (typeof console !== 'undefined' && console.warn) {
       if (errors.every(function (e) {
@@ -19724,11 +20328,11 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../dev/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 478)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 482)))
 
 /***/ }),
 
-/***/ 478:
+/***/ 482:
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -19759,7 +20363,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 479);
+        if (!path) path = __webpack_require__(/*! path */ 483);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -19773,7 +20377,7 @@ exports.features = {};
 
 /***/ }),
 
-/***/ 479:
+/***/ 483:
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -20083,107 +20687,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 478)))
-
-/***/ }),
-
-/***/ 48:
-/*!********************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/store/index.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 25));
-var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 49));
-// 定义不需要永久存储的目录，即下次APP启动数据会自动清空，值为在modules目录下的文件名
-var notSaveStateKeys = ['$error'];
-
-/* 以下代码请勿改动，除非你知道改动带来的效果 */
-
-var modulesTemp = {};
-var lifeData = uni.getStorageSync('lifeData') || {};
-var modulesFiles = __webpack_require__(50);
-modulesFiles.keys().map(function (modulePath, index) {
-  var moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1');
-  modulesTemp[moduleName] = modulesFiles(modulePath).default;
-});
-var modules = {};
-for (var moduleName in modulesTemp) {
-  var moduleItem = modulesTemp[moduleName];
-  if (moduleItem && moduleItem.namespaced) {
-    var moduleNameArr = moduleName.split("/");
-    var lastName = moduleNameArr[moduleNameArr.length - 1];
-    if (lastName === "index") {
-      moduleName = moduleName.replace(/\/index$/, '');
-    }
-    modules[moduleName] = moduleItem;
-  }
-}
-for (var _moduleName in modules) {
-  if (notSaveStateKeys.indexOf(_moduleName) === -1) {
-    if (!lifeData[_moduleName]) lifeData[_moduleName] = {};
-  }
-}
-uni.setStorageSync('lifeData', lifeData);
-
-// 保存变量到本地存储中
-var saveLifeData = function saveLifeData(key, value) {
-  // 判断变量名是否在需要存储的数组中
-  if (notSaveStateKeys.indexOf(key) === -1) {
-    // 获取本地存储的lifeData对象，将变量添加到对象中
-    var tmp = uni.getStorageSync('lifeData');
-    // 第一次打开APP，不存在lifeData变量，故放一个{}空对象
-    tmp = tmp ? tmp : {};
-    tmp[key] = value;
-    // 执行这一步后，所有需要存储的变量，都挂载在本地的lifeData对象中
-    uni.setStorageSync('lifeData', tmp);
-  }
-};
-_vue.default.use(_vuex.default);
-var store = new _vuex.default.Store({
-  modules: modules,
-  // 如果是开发环境,则开启严格模式
-  strict: "development" === 'development',
-  // 公共 mutations
-  mutations: {
-    updateStore: function updateStore(state, payload) {
-      // 判断是否多层级调用，state中为对象存在的情况，诸如user.info.score = 1
-      if (typeof payload.value === "undefined") payload.value = "";
-      var nameArr = payload.name.split('.');
-      var saveKey = '';
-      var len = nameArr.length;
-      if (len >= 2) {
-        var obj = state[nameArr[0]];
-        for (var i = 1; i < len - 1; i++) {
-          var keyName = nameArr[i];
-          if ((0, _typeof2.default)(obj[keyName]) !== "object") obj[keyName] = {};
-          obj = obj[keyName];
-        }
-        obj[nameArr[len - 1]] = JSON.parse(JSON.stringify(payload.value));
-        saveKey = nameArr[0];
-      } else {
-        // 单层级变量，在state就是一个普通变量的情况
-        state[payload.name] = JSON.parse(JSON.stringify(payload.value));
-        saveKey = payload.name;
-      }
-      // 保存变量到本地，见顶部函数定义
-      saveLifeData(saveKey, state[saveKey]);
-    }
-  }
-});
-var _default = store;
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 482)))
 
 /***/ }),
 
@@ -21463,16 +21967,16 @@ module.exports = _slicedToArray, module.exports.__esModule = true, module.export
 /***/ }),
 
 /***/ 50:
-/*!******************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/store/modules sync \.js$ ***!
-  \******************************************************************/
+/*!*********************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/store/modules sync \.js$ ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./$app.js": 51,
-	"./$category.js": 548,
-	"./$user.js": 52
+	"./$category.js": 52,
+	"./$user.js": 53
 };
 
 
@@ -21498,9 +22002,9 @@ webpackContext.id = 50;
 /***/ }),
 
 /***/ 51:
-/*!***************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/store/modules/$app.js ***!
-  \***************************************************************/
+/*!******************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/store/modules/$app.js ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21568,9 +22072,59 @@ exports.default = _default;
 /***/ }),
 
 /***/ 52:
-/*!****************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/store/modules/$user.js ***!
-  \****************************************************************/
+/*!***********************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/store/modules/$category.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+/**
+ * vuex 用户状态管理模块
+ */
+var lifeData = uni.getStorageSync('lifeData') || {};
+var $category = lifeData.$category || {};
+var _default = {
+  // 通过添加 namespaced: true 的方式使其成为带命名空间的模块
+  namespaced: true,
+  /**
+   * vuex的基本数据，用来存储变量
+   */
+  state: {
+    categoryId: $category.categoryId || ""
+  },
+  /**
+   * 从基本数据(state)派生的数据，相当于state的计算属性
+   */
+  getters: {},
+  /**
+   * 提交更新数据的方法，必须是同步的(如果需要异步使用action)。
+   * 每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
+   * 回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数，提交载荷作为第二个参数。
+   */
+  mutations: {},
+  /**
+   * 和mutation的功能大致相同，不同之处在于 ==》
+   * 1. Action 提交的是 mutation，而不是直接变更状态。 
+   * 2. Action 可以包含任意异步操作。
+   */
+  actions: {}
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 53:
+/*!*******************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/store/modules/$user.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21628,10 +22182,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 53:
-/*!**************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/index.js ***!
-  \**************************************************************************/
+/***/ 54:
+/*!*****************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/index.js ***!
+  \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21643,32 +22197,32 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _mixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mixin.js */ 54));
-var _request = _interopRequireDefault(__webpack_require__(/*! ./libs/request */ 55));
-var _queryParams = _interopRequireDefault(__webpack_require__(/*! ./libs/function/queryParams.js */ 59));
-var _route = _interopRequireDefault(__webpack_require__(/*! ./libs/function/route.js */ 60));
-var _timeFormat = _interopRequireDefault(__webpack_require__(/*! ./libs/function/timeFormat.js */ 61));
-var _timeFrom = _interopRequireDefault(__webpack_require__(/*! ./libs/function/timeFrom.js */ 62));
-var _colorGradient = _interopRequireDefault(__webpack_require__(/*! ./libs/function/colorGradient.js */ 63));
-var _guid = _interopRequireDefault(__webpack_require__(/*! ./libs/function/guid.js */ 64));
-var _color = _interopRequireDefault(__webpack_require__(/*! ./libs/function/color.js */ 65));
-var _type2icon = _interopRequireDefault(__webpack_require__(/*! ./libs/function/type2icon.js */ 66));
-var _randomArray = _interopRequireDefault(__webpack_require__(/*! ./libs/function/randomArray.js */ 67));
-var _deepClone = _interopRequireDefault(__webpack_require__(/*! ./libs/function/deepClone.js */ 57));
-var _deepMerge = _interopRequireDefault(__webpack_require__(/*! ./libs/function/deepMerge.js */ 56));
-var _addUnit = _interopRequireDefault(__webpack_require__(/*! ./libs/function/addUnit.js */ 68));
-var _test = _interopRequireDefault(__webpack_require__(/*! ./libs/function/test.js */ 58));
-var _random = _interopRequireDefault(__webpack_require__(/*! ./libs/function/random.js */ 69));
-var _trim = _interopRequireDefault(__webpack_require__(/*! ./libs/function/trim.js */ 70));
-var _toast = _interopRequireDefault(__webpack_require__(/*! ./libs/function/toast.js */ 71));
-var _getParent = _interopRequireDefault(__webpack_require__(/*! ./libs/function/getParent.js */ 72));
-var _$parent = _interopRequireDefault(__webpack_require__(/*! ./libs/function/$parent.js */ 73));
-var _sys = __webpack_require__(/*! ./libs/function/sys.js */ 74);
-var _debounce = _interopRequireDefault(__webpack_require__(/*! ./libs/function/debounce.js */ 75));
-var _throttle = _interopRequireDefault(__webpack_require__(/*! ./libs/function/throttle.js */ 76));
-var _addStyle = _interopRequireDefault(__webpack_require__(/*! ./libs/function/addStyle.js */ 77));
-var _config = _interopRequireDefault(__webpack_require__(/*! ./libs/config/config.js */ 78));
-var _zIndex = _interopRequireDefault(__webpack_require__(/*! ./libs/config/zIndex.js */ 79));
+var _mixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mixin.js */ 55));
+var _request = _interopRequireDefault(__webpack_require__(/*! ./libs/request */ 56));
+var _queryParams = _interopRequireDefault(__webpack_require__(/*! ./libs/function/queryParams.js */ 60));
+var _route = _interopRequireDefault(__webpack_require__(/*! ./libs/function/route.js */ 61));
+var _timeFormat = _interopRequireDefault(__webpack_require__(/*! ./libs/function/timeFormat.js */ 62));
+var _timeFrom = _interopRequireDefault(__webpack_require__(/*! ./libs/function/timeFrom.js */ 63));
+var _colorGradient = _interopRequireDefault(__webpack_require__(/*! ./libs/function/colorGradient.js */ 64));
+var _guid = _interopRequireDefault(__webpack_require__(/*! ./libs/function/guid.js */ 65));
+var _color = _interopRequireDefault(__webpack_require__(/*! ./libs/function/color.js */ 66));
+var _type2icon = _interopRequireDefault(__webpack_require__(/*! ./libs/function/type2icon.js */ 67));
+var _randomArray = _interopRequireDefault(__webpack_require__(/*! ./libs/function/randomArray.js */ 68));
+var _deepClone = _interopRequireDefault(__webpack_require__(/*! ./libs/function/deepClone.js */ 58));
+var _deepMerge = _interopRequireDefault(__webpack_require__(/*! ./libs/function/deepMerge.js */ 57));
+var _addUnit = _interopRequireDefault(__webpack_require__(/*! ./libs/function/addUnit.js */ 69));
+var _test = _interopRequireDefault(__webpack_require__(/*! ./libs/function/test.js */ 59));
+var _random = _interopRequireDefault(__webpack_require__(/*! ./libs/function/random.js */ 70));
+var _trim = _interopRequireDefault(__webpack_require__(/*! ./libs/function/trim.js */ 71));
+var _toast = _interopRequireDefault(__webpack_require__(/*! ./libs/function/toast.js */ 72));
+var _getParent = _interopRequireDefault(__webpack_require__(/*! ./libs/function/getParent.js */ 73));
+var _$parent = _interopRequireDefault(__webpack_require__(/*! ./libs/function/$parent.js */ 74));
+var _sys = __webpack_require__(/*! ./libs/function/sys.js */ 75);
+var _debounce = _interopRequireDefault(__webpack_require__(/*! ./libs/function/debounce.js */ 76));
+var _throttle = _interopRequireDefault(__webpack_require__(/*! ./libs/function/throttle.js */ 77));
+var _addStyle = _interopRequireDefault(__webpack_require__(/*! ./libs/function/addStyle.js */ 78));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./libs/config/config.js */ 79));
+var _zIndex = _interopRequireDefault(__webpack_require__(/*! ./libs/config/zIndex.js */ 80));
 // 引入全局mixin
 
 // 引入关于是否mixin集成小程序分享的配置
@@ -21765,10 +22319,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 54:
-/*!*************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/mixin/mixin.js ***!
-  \*************************************************************************************/
+/***/ 55:
+/*!****************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/mixin/mixin.js ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21849,119 +22403,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 548:
-/*!********************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/store/modules/$category.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-/**
- * vuex 用户状态管理模块
- */
-var lifeData = uni.getStorageSync('lifeData') || {};
-var $category = lifeData.$category || {};
-var _default = {
-  // 通过添加 namespaced: true 的方式使其成为带命名空间的模块
-  namespaced: true,
-  /**
-   * vuex的基本数据，用来存储变量
-   */
-  state: {
-    categoryId: $category.categoryId || ""
-  },
-  /**
-   * 从基本数据(state)派生的数据，相当于state的计算属性
-   */
-  getters: {},
-  /**
-   * 提交更新数据的方法，必须是同步的(如果需要异步使用action)。
-   * 每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
-   * 回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数，提交载荷作为第二个参数。
-   */
-  mutations: {},
-  /**
-   * 和mutation的功能大致相同，不同之处在于 ==》
-   * 1. Action 提交的是 mutation，而不是直接变更状态。 
-   * 2. Action 可以包含任意异步操作。
-   */
-  actions: {}
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-
-/***/ 549:
-/*!********************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/utils/index.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.addCart = addCart;
-exports.pageTo = pageTo;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 28));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 31));
-var _api = _interopRequireDefault(__webpack_require__(/*! @/api */ 108));
-function pageTo(path) {
-  vk.navigateTo(path);
-}
-
-//异步的方法
-function addCart(_x, _x2) {
-  return _addCart.apply(this, arguments);
-}
-function _addCart() {
-  _addCart = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(productId, productNum) {
-    return _regenerator.default.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (vk.checkToken()) {
-              _context.next = 5;
-              break;
-            }
-            vk.navigateTo('/pages/me/me');
-            return _context.abrupt("return");
-          case 5:
-            _context.next = 7;
-            return _api.default.addCart({
-              productId: productId,
-              productNum: productNum
-            });
-          case 7:
-            vk.toast("添加成功", "success");
-          case 8:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _addCart.apply(this, arguments);
-}
-
-/***/ }),
-
-/***/ 55:
-/*!***************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/request/index.js ***!
-  \***************************************************************************************/
+/***/ 56:
+/*!******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/request/index.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21975,8 +22420,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
-var _deepMerge = _interopRequireDefault(__webpack_require__(/*! ../function/deepMerge */ 56));
-var _test = _interopRequireDefault(__webpack_require__(/*! ../function/test */ 58));
+var _deepMerge = _interopRequireDefault(__webpack_require__(/*! ../function/deepMerge */ 57));
+var _test = _interopRequireDefault(__webpack_require__(/*! ../function/test */ 59));
 var Request = /*#__PURE__*/function () {
   function Request() {
     var _this = this;
@@ -22170,10 +22615,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 56:
-/*!********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/deepMerge.js ***!
-  \********************************************************************************************/
+/***/ 57:
+/*!***********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/deepMerge.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22186,7 +22631,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-var _deepClone = _interopRequireDefault(__webpack_require__(/*! ./deepClone */ 57));
+var _deepClone = _interopRequireDefault(__webpack_require__(/*! ./deepClone */ 58));
 // JS对象深度合并
 function deepMerge() {
   var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -22220,10 +22665,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 57:
-/*!********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/deepClone.js ***!
-  \********************************************************************************************/
+/***/ 58:
+/*!***********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/deepClone.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22262,10 +22707,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 58:
-/*!***************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/test.js ***!
-  \***************************************************************************************/
+/***/ 59:
+/*!******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/test.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22566,10 +23011,24 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 59:
-/*!**********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/queryParams.js ***!
-  \**********************************************************************************************/
+/***/ 6:
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayWithHoles.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 60:
+/*!*************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/queryParams.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22648,24 +23107,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 6:
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/arrayWithHoles.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 60:
-/*!****************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/route.js ***!
-  \****************************************************************************************/
+/***/ 61:
+/*!*******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/route.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22844,10 +23289,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 61:
-/*!*********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/timeFormat.js ***!
-  \*********************************************************************************************/
+/***/ 62:
+/*!************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/timeFormat.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22921,10 +23366,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 62:
-/*!*******************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/timeFrom.js ***!
-  \*******************************************************************************************/
+/***/ 63:
+/*!**********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/timeFrom.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22936,7 +23381,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _timeFormat = _interopRequireDefault(__webpack_require__(/*! ../../libs/function/timeFormat.js */ 61));
+var _timeFormat = _interopRequireDefault(__webpack_require__(/*! ../../libs/function/timeFormat.js */ 62));
 /**
  * 时间戳转为多久之前
  * @param String timestamp 时间戳
@@ -22986,10 +23431,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 63:
-/*!************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/colorGradient.js ***!
-  \************************************************************************************************/
+/***/ 64:
+/*!***************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/colorGradient.js ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23140,10 +23585,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 64:
-/*!***************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/guid.js ***!
-  \***************************************************************************************/
+/***/ 65:
+/*!******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/guid.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23201,10 +23646,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 65:
-/*!****************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/color.js ***!
-  \****************************************************************************************/
+/***/ 66:
+/*!*******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/color.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23250,10 +23695,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 66:
-/*!********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/type2icon.js ***!
-  \********************************************************************************************/
+/***/ 67:
+/*!***********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/type2icon.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23304,10 +23749,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 67:
-/*!**********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/randomArray.js ***!
-  \**********************************************************************************************/
+/***/ 68:
+/*!*************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/randomArray.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23331,10 +23776,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 68:
-/*!******************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/addUnit.js ***!
-  \******************************************************************************************/
+/***/ 69:
+/*!*********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/addUnit.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23346,7 +23791,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = addUnit;
-var _test = _interopRequireDefault(__webpack_require__(/*! ./test.js */ 58));
+var _test = _interopRequireDefault(__webpack_require__(/*! ./test.js */ 59));
 // 添加单位，如果有rpx，%，px等单位结尾或者值为auto，直接返回，否则加上rpx单位结尾
 function addUnit() {
   var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'auto';
@@ -23355,33 +23800,6 @@ function addUnit() {
   // 用uView内置验证规则中的number判断是否为数值
   return _test.default.number(value) ? "".concat(value).concat(unit) : value;
 }
-
-/***/ }),
-
-/***/ 69:
-/*!*****************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/random.js ***!
-  \*****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-function random(min, max) {
-  if (min >= 0 && max > 0 && max >= min) {
-    var gab = max - min + 1;
-    return Math.floor(Math.random() * gab + min);
-  } else {
-    return 0;
-  }
-}
-var _default = random;
-exports.default = _default;
 
 /***/ }),
 
@@ -23426,9 +23844,36 @@ module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module
 /***/ }),
 
 /***/ 70:
-/*!***************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/trim.js ***!
-  \***************************************************************************************/
+/*!********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/random.js ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+function random(min, max) {
+  if (min >= 0 && max > 0 && max >= min) {
+    var gab = max - min + 1;
+    return Math.floor(Math.random() * gab + min);
+  } else {
+    return 0;
+  }
+}
+var _default = random;
+exports.default = _default;
+
+/***/ }),
+
+/***/ 71:
+/*!******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/trim.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23458,10 +23903,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 71:
-/*!****************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/toast.js ***!
-  \****************************************************************************************/
+/***/ 72:
+/*!*******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/toast.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23486,10 +23931,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 72:
-/*!********************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/getParent.js ***!
-  \********************************************************************************************/
+/***/ 73:
+/*!***********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/getParent.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23556,10 +24001,10 @@ function getParent(name, keys) {
 
 /***/ }),
 
-/***/ 73:
-/*!******************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/$parent.js ***!
-  \******************************************************************************************/
+/***/ 74:
+/*!*********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/$parent.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23592,10 +24037,10 @@ function $parent() {
 
 /***/ }),
 
-/***/ 74:
-/*!**************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/sys.js ***!
-  \**************************************************************************************/
+/***/ 75:
+/*!*****************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/sys.js ***!
+  \*****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23618,10 +24063,10 @@ function sys() {
 
 /***/ }),
 
-/***/ 75:
-/*!*******************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/debounce.js ***!
-  \*******************************************************************************************/
+/***/ 76:
+/*!**********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/debounce.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23666,10 +24111,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 76:
-/*!*******************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/throttle.js ***!
-  \*******************************************************************************************/
+/***/ 77:
+/*!**********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/throttle.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23722,10 +24167,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 77:
-/*!*******************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/addStyle.js ***!
-  \*******************************************************************************************/
+/***/ 78:
+/*!**********************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/function/addStyle.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23738,7 +24183,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-var _test = _interopRequireDefault(__webpack_require__(/*! ./test.js */ 58));
+var _test = _interopRequireDefault(__webpack_require__(/*! ./test.js */ 59));
 /**
  * @description 样式转换
  * 对象转字符串，或者字符串转对象
@@ -23784,10 +24229,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 78:
-/*!***************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/config/config.js ***!
-  \***************************************************************************************/
+/***/ 79:
+/*!******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/config/config.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23810,10 +24255,30 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 79:
-/*!***************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/config/zIndex.js ***!
-  \***************************************************************************************/
+/***/ 8:
+/*!***************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayLikeToArray = __webpack_require__(/*! ./arrayLikeToArray.js */ 9);
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
+}
+module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 80:
+/*!******************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-uview-ui/libs/config/zIndex.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23847,30 +24312,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 8:
-/*!***************************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js ***!
-  \***************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayLikeToArray = __webpack_require__(/*! ./arrayLikeToArray.js */ 9);
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
-}
-module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 80:
-/*!**************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/index.js ***!
-  \**************************************************************************/
+/***/ 81:
+/*!*****************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/index.js ***!
+  \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23882,7 +24327,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _vkUnicloudPage = _interopRequireDefault(__webpack_require__(/*! ./vk_modules/vk-unicloud-page */ 81));
+var _vkUnicloudPage = _interopRequireDefault(__webpack_require__(/*! ./vk_modules/vk-unicloud-page */ 82));
 /**
  * vk-unicloud框架客户端(前端)
  * author	VK
@@ -23892,10 +24337,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 81:
-/*!******************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/index.js ***!
-  \******************************************************************************************************/
+/***/ 82:
+/*!*********************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/index.js ***!
+  \*********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23909,24 +24354,24 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _vkUnicloudUserCenter = _interopRequireDefault(__webpack_require__(/*! ./libs/vk-unicloud/vk-unicloud-user-center */ 82));
-var _vkUnicloudCallFunctionUtil = _interopRequireDefault(__webpack_require__(/*! ./libs/vk-unicloud/vk-unicloud-callFunctionUtil */ 83));
-var _index = _interopRequireDefault(__webpack_require__(/*! ./libs/function/index */ 85));
-var _modal = _interopRequireDefault(__webpack_require__(/*! ./libs/function/modal */ 92));
-var _vk = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.navigate */ 93));
-var _vk2 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.localStorage */ 94));
-var _vk3 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.sessionStorage */ 95));
-var _aliyunOSSUtil = _interopRequireDefault(__webpack_require__(/*! ./libs/function/aliyunOSSUtil */ 96));
-var _index2 = _interopRequireDefault(__webpack_require__(/*! ./libs/openapi/index */ 97));
-var _vk4 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.request */ 99));
-var _vk5 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.importObject */ 100));
-var _vk6 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.filters */ 101));
-var _mixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mixin.js */ 102));
-var _permission = _interopRequireDefault(__webpack_require__(/*! ./libs/function/permission */ 103));
-var _mixin2 = _interopRequireDefault(__webpack_require__(/*! ./libs/store/mixin/mixin */ 104));
-var _error = _interopRequireDefault(__webpack_require__(/*! ./libs/store/libs/error */ 105));
-var _console = _interopRequireDefault(__webpack_require__(/*! ./libs/install/console.log */ 106));
-var _updateManager = _interopRequireDefault(__webpack_require__(/*! ./libs/function/updateManager.js */ 107));
+var _vkUnicloudUserCenter = _interopRequireDefault(__webpack_require__(/*! ./libs/vk-unicloud/vk-unicloud-user-center */ 83));
+var _vkUnicloudCallFunctionUtil = _interopRequireDefault(__webpack_require__(/*! ./libs/vk-unicloud/vk-unicloud-callFunctionUtil */ 84));
+var _index = _interopRequireDefault(__webpack_require__(/*! ./libs/function/index */ 86));
+var _modal = _interopRequireDefault(__webpack_require__(/*! ./libs/function/modal */ 93));
+var _vk = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.navigate */ 94));
+var _vk2 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.localStorage */ 95));
+var _vk3 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.sessionStorage */ 96));
+var _aliyunOSSUtil = _interopRequireDefault(__webpack_require__(/*! ./libs/function/aliyunOSSUtil */ 97));
+var _index2 = _interopRequireDefault(__webpack_require__(/*! ./libs/openapi/index */ 98));
+var _vk4 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.request */ 100));
+var _vk5 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.importObject */ 101));
+var _vk6 = _interopRequireDefault(__webpack_require__(/*! ./libs/function/vk.filters */ 102));
+var _mixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mixin.js */ 103));
+var _permission = _interopRequireDefault(__webpack_require__(/*! ./libs/function/permission */ 104));
+var _mixin2 = _interopRequireDefault(__webpack_require__(/*! ./libs/store/mixin/mixin */ 105));
+var _error = _interopRequireDefault(__webpack_require__(/*! ./libs/store/libs/error */ 106));
+var _console = _interopRequireDefault(__webpack_require__(/*! ./libs/install/console.log */ 107));
+var _updateManager = _interopRequireDefault(__webpack_require__(/*! ./libs/function/updateManager.js */ 108));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var vk = _objectSpread(_objectSpread(_objectSpread({
@@ -24069,14 +24514,14 @@ var _default = {
   install: install
 };
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../dev/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3), __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3), __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
 
-/***/ 82:
-/*!*****************************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/vk-unicloud/vk-unicloud-user-center.js ***!
-  \*****************************************************************************************************************************************/
+/***/ 83:
+/*!********************************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/vk-unicloud/vk-unicloud-user-center.js ***!
+  \********************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -24089,8 +24534,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _vkUnicloudCallFunctionUtil = _interopRequireDefault(__webpack_require__(/*! ./vk-unicloud-callFunctionUtil.js */ 83));
-var _debounce = _interopRequireDefault(__webpack_require__(/*! ../function/debounce.js */ 84));
+var _vkUnicloudCallFunctionUtil = _interopRequireDefault(__webpack_require__(/*! ./vk-unicloud-callFunctionUtil.js */ 84));
+var _debounce = _interopRequireDefault(__webpack_require__(/*! ../function/debounce.js */ 85));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var callFunction = _vkUnicloudCallFunctionUtil.default.callFunction,
@@ -25076,10 +25521,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 83:
-/*!**********************************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/vk-unicloud/vk-unicloud-callFunctionUtil.js ***!
-  \**********************************************************************************************************************************************/
+/***/ 84:
+/*!*************************************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/vk-unicloud/vk-unicloud-callFunctionUtil.js ***!
+  \*************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26168,10 +26613,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 84:
-/*!***********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/debounce.js ***!
-  \***********************************************************************************************************************/
+/***/ 85:
+/*!**************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/debounce.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26223,10 +26668,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 85:
-/*!********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/index.js ***!
-  \********************************************************************************************************************/
+/***/ 86:
+/*!***********************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/index.js ***!
+  \***********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26240,12 +26685,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-var _debounce = _interopRequireDefault(__webpack_require__(/*! ./debounce.js */ 84));
-var _throttle = _interopRequireDefault(__webpack_require__(/*! ./throttle.js */ 86));
-var _queryParams = _interopRequireDefault(__webpack_require__(/*! ./queryParams.js */ 87));
-var _setClipboardData = _interopRequireDefault(__webpack_require__(/*! ./setClipboardData.js */ 88));
-var _timeUtil = _interopRequireDefault(__webpack_require__(/*! ./timeUtil.js */ 89));
-var _treeUtil = _interopRequireDefault(__webpack_require__(/*! ./treeUtil.js */ 90));
+var _debounce = _interopRequireDefault(__webpack_require__(/*! ./debounce.js */ 85));
+var _throttle = _interopRequireDefault(__webpack_require__(/*! ./throttle.js */ 87));
+var _queryParams = _interopRequireDefault(__webpack_require__(/*! ./queryParams.js */ 88));
+var _setClipboardData = _interopRequireDefault(__webpack_require__(/*! ./setClipboardData.js */ 89));
+var _timeUtil = _interopRequireDefault(__webpack_require__(/*! ./timeUtil.js */ 90));
+var _treeUtil = _interopRequireDefault(__webpack_require__(/*! ./treeUtil.js */ 91));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 /**
@@ -28629,10 +29074,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 86:
-/*!***********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/throttle.js ***!
-  \***********************************************************************************************************************/
+/***/ 87:
+/*!**************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/throttle.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28688,10 +29133,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 87:
-/*!**************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/queryParams.js ***!
-  \**************************************************************************************************************************/
+/***/ 88:
+/*!*****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/queryParams.js ***!
+  \*****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28772,10 +29217,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 88:
-/*!*******************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/setClipboardData.js ***!
-  \*******************************************************************************************************************************/
+/***/ 89:
+/*!**********************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/setClipboardData.js ***!
+  \**********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28801,10 +29246,28 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 89:
-/*!***********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/timeUtil.js ***!
-  \***********************************************************************************************************************/
+/***/ 9:
+/*!*****************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
+module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 90:
+/*!**************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/timeUtil.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29507,28 +29970,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 9:
-/*!*****************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-  return arr2;
-}
-module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 90:
-/*!***********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/treeUtil.js ***!
-  \***********************************************************************************************************************/
+/***/ 91:
+/*!**************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/treeUtil.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29540,7 +29985,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _deepClone = _interopRequireDefault(__webpack_require__(/*! ./deepClone */ 91));
+var _deepClone = _interopRequireDefault(__webpack_require__(/*! ./deepClone */ 92));
 var util = {};
 /**
  * 将树形结构转成数组结构
@@ -29649,10 +30094,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 91:
-/*!************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/deepClone.js ***!
-  \************************************************************************************************************************/
+/***/ 92:
+/*!***************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/deepClone.js ***!
+  \***************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29691,10 +30136,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 92:
-/*!********************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/modal.js ***!
-  \********************************************************************************************************************/
+/***/ 93:
+/*!***********************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/modal.js ***!
+  \***********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30018,10 +30463,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 93:
-/*!**************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.navigate.js ***!
-  \**************************************************************************************************************************/
+/***/ 94:
+/*!*****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.navigate.js ***!
+  \*****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30496,10 +30941,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 94:
-/*!******************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.localStorage.js ***!
-  \******************************************************************************************************************************/
+/***/ 95:
+/*!*********************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.localStorage.js ***!
+  \*********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30659,10 +31104,10 @@ function watchLocalStorage(obj) {
 
 /***/ }),
 
-/***/ 95:
-/*!********************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.sessionStorage.js ***!
-  \********************************************************************************************************************************/
+/***/ 96:
+/*!***********************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.sessionStorage.js ***!
+  \***********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30772,10 +31217,10 @@ function watchSessionStorage(obj) {
 
 /***/ }),
 
-/***/ 96:
-/*!****************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/aliyunOSSUtil.js ***!
-  \****************************************************************************************************************************/
+/***/ 97:
+/*!*******************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/aliyunOSSUtil.js ***!
+  \*******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31065,10 +31510,10 @@ function dataURLtoBlob(dataurl) {
 
 /***/ }),
 
-/***/ 97:
-/*!*******************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/openapi/index.js ***!
-  \*******************************************************************************************************************/
+/***/ 98:
+/*!**********************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/openapi/index.js ***!
+  \**********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31080,7 +31525,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _baidu = _interopRequireDefault(__webpack_require__(/*! ./baidu */ 98));
+var _baidu = _interopRequireDefault(__webpack_require__(/*! ./baidu */ 99));
 /**
  * 开放API
  */
@@ -31096,10 +31541,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 98:
-/*!*************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/openapi/baidu/index.js ***!
-  \*************************************************************************************************************************/
+/***/ 99:
+/*!****************************************************************************************************************************!*\
+  !*** E:/appProject/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/openapi/baidu/index.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31288,452 +31733,6 @@ function request() {
 }
 var _default = baidu;
 exports.default = _default;
-
-/***/ }),
-
-/***/ 99:
-/*!*************************************************************************************************************************!*\
-  !*** D:/web-app/ich-zcb/ich-zcb-client/uni_modules/vk-unicloud/vk_modules/vk-unicloud-page/libs/function/vk.request.js ***!
-  \*************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-var requestUtil = {};
-requestUtil.config = {
-  // 请求配置
-  request: {
-    // 公共请求参数(每次请求都会带上的参数)
-    dataParam: {}
-  },
-  requestGlobalParamKeyName: "vk_url_request_global_param",
-  debug: "development" !== "production",
-  // 日志风格
-  logger: {
-    colorArr: ["#0095ff", "#67C23A"]
-  }
-};
-var counterNum = 0;
-/**
- * request 请求库
- * 注意: 该请求库目前主要是框架自身使用，且近期变动频率较高，目前请勿使用在你自己的业务中。
- * @param {String} url                服务器接口地址
- * @param {Object/String/ArrayBuffer} data 请求的参数                                      App（自定义组件编译模式）不支持ArrayBuffer类型
- * @param {Object} header             设置请求的 header，header 中不能设置 Referer。         App、H5端会自动带上cookie，且H5端不可手动修改
- * @param {String} method             默认 POST 可选 GET
- * @param {Number} timeout            超时时间，单位 ms 默认3000(30秒)
- * @param {String} dataType           默认json 如果设为 json，会尝试对返回的数据做一次 JSON.parse
- * @param {String} responseType       默认 text 设置响应的数据类型。合法值：text、arraybuffer App和支付宝小程序不支持
- * @param {Boolean} sslVerify         默认 true 是否需要验证ssl证书 仅App安卓端支持（HBuilderX 2.3.3+）          仅App安卓端支持（HBuilderX 2.3.3+）
- * @param {Boolean} withCredentials   默认 false 跨域请求时是否携带凭证（cookies）            仅H5支持（HBuilderX 2.6.15+）
- * @param {Boolean} firstIpv4         默认 false DNS解析时优先使用ipv4                       仅 App-Android 支持 (HBuilderX 2.8.0+)
- * @param {String} success            成功回调
- * @param {String} fail               失败回调
- * @param {String} complete           完成回调
- * 以下为特殊参数
- * @param {String} errorCodeName      服务器返回的错误码的字段名，若不为空，则会对返回结果进行判断
- * @param {String} errorMsgName       服务器返回的错误码的字符串含义，若不为空，且errorCodeName对应的值不为0，则会alert弹窗
- * @param {Boolean} needAlert         服务器返回的错误时，是否需要alert弹出提示
- *
- * 调用示例
-vk.request({
-	url: `https://www.xxx.com/api/xxxx`,
-	method:"POST",
-	header:{
-		"content-type": "application/json; charset=utf-8",
-	},
-	data:{
-
-	},
-	success: function(data){
-
-	},
-	fail: function(err){
-
-	}
-});
- */
-
-requestUtil.request = function () {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var vk = uni.vk;
-  // 去除值为 undefined 的参数
-  if ((0, _typeof2.default)(obj.data) === "object") {
-    obj.data = vk.pubfn.copyObject(obj.data);
-  }
-  // 注入自定义全局参数开始-----------------------------------------------------------
-  var config = requestUtil.config;
-  var globalParam = uni.getStorageSync(config.requestGlobalParamKeyName) || {};
-  // 根据正则规格自动匹配全局请求参数
-  for (var i in globalParam) {
-    var _customDate = globalParam[i];
-    if (_customDate.regExp) {
-      if ((0, _typeof2.default)(_customDate.regExp) === "object") {
-        // 数组形式
-        for (var _i = 0; _i < _customDate.regExp.length; _i++) {
-          var regExp = new RegExp(_customDate.regExp[_i]);
-          if (regExp.test(obj.url)) {
-            obj.data = Object.assign(_customDate.data, obj.data);
-            break;
-          }
-        }
-      } else {
-        // 字符串形式
-        var _regExp = new RegExp(_customDate.regExp);
-        if (_regExp.test(obj.url)) {
-          obj.data = Object.assign(_customDate.data, obj.data);
-        }
-      }
-    }
-  }
-  // 根据指定globalParamName匹配全局请求参数
-  var customDate = requestUtil.getRequestGlobalParam(obj.globalParamName);
-  if (customDate && JSON.stringify(customDate) !== "{}") {
-    if (customDate.regExp) {
-      obj.data = Object.assign(customDate.data, obj.data); // 新版本
-    } else {
-      obj.data = Object.assign(customDate, obj.data); // 兼容旧版本
-    }
-  }
-  // 注入自定义全局参数结束-----------------------------------------------------------
-
-  if (!obj.method) obj.method = "POST"; // 默认POST请求
-  if (typeof obj.dataType === "undefined") obj.dataType = "json";
-  if (obj.dataType == "default" || obj.dataType === "") delete obj.dataType;
-  if (typeof obj.header === "undefined" && typeof obj.headers !== "undefined") {
-    obj.header = obj.headers;
-  }
-
-  // 自动注入token到请求头开始-----------------------------------------------------------
-  // 注意：自2.15.1开始，需要手动指定uniIdToken: true 才会自动添加token到请求头里
-  if (typeof vk.getToken === "function" && obj.uniIdToken) {
-    var uni_id_token;
-    if (obj.uniIdToken === true) {
-      uni_id_token = vk.getToken();
-    } else if (typeof obj.uniIdToken === "boolean") {
-      uni_id_token = obj.uniIdToken;
-    }
-    if (uni_id_token) {
-      if (!obj.header) obj.header = {};
-      obj.header["uni-id-token"] = uni_id_token;
-    }
-  }
-  // 自动注入token到请求头结束-----------------------------------------------------------
-  var interceptor = obj.interceptor;
-  delete obj.interceptor;
-  if (interceptor && typeof interceptor.invoke === "function") {
-    var interceptorRes = interceptor.invoke(obj);
-    if (interceptorRes === false) {
-      return;
-    }
-  }
-  if (typeof obj.timeout === "undefined") obj.timeout = 30000; // 超时时间，单位 ms(默认30秒)
-  var Logger = {};
-  if (config.debug) {
-    Logger.params = (0, _typeof2.default)(obj.data) == "object" ? vk.pubfn.copyObject(obj.data) : obj.data;
-    Logger.startTime = new Date().getTime();
-    var url = obj.url;
-    var path = obj.url.split("?")[0];
-    path = path.substring(path.indexOf("://") + 3);
-    Logger.domainName = path.substring(0, path.indexOf("/"));
-    Logger.action = path.substring(path.indexOf("/") + 1);
-    Logger.url = url;
-  }
-  if (obj.title) vk.showLoading(obj.title);
-  if (obj.loading) vk.setLoading(true, obj.loading);
-  var promiseAction = new Promise(function (resolve, reject) {
-    uni.request(_objectSpread(_objectSpread({}, obj), {}, {
-      success: function success(res) {
-        if (interceptor && typeof interceptor.success === "function") {
-          var _interceptorRes = interceptor.success(res);
-          if (_interceptorRes === false) {
-            return;
-          }
-        }
-        requestSuccess({
-          res: res,
-          params: obj,
-          Logger: Logger,
-          resolve: resolve,
-          reject: reject
-        });
-      },
-      fail: function fail(res) {
-        if (interceptor && typeof interceptor.fail === "function") {
-          var _interceptorRes2 = interceptor.fail(res);
-          if (_interceptorRes2 === false) {
-            return;
-          }
-        }
-        requestFail({
-          res: res,
-          params: obj,
-          Logger: Logger,
-          reject: reject
-        });
-      },
-      complete: function complete(res) {
-        if (interceptor && typeof interceptor.complete === "function") {
-          var _interceptorRes3 = interceptor.complete(res);
-          if (_interceptorRes3 === false) {
-            return;
-          }
-        }
-        requestComplete({
-          res: res,
-          params: obj,
-          Logger: Logger
-        });
-      }
-    }));
-  });
-  promiseAction.catch(function (error) {});
-  return promiseAction;
-};
-// 请求成功回调
-function requestSuccess() {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var vk = uni.vk;
-  var config = requestUtil.config;
-  var _obj$res = obj.res,
-    res = _obj$res === void 0 ? {} : _obj$res,
-    params = obj.params,
-    Logger = obj.Logger,
-    resolve = obj.resolve,
-    reject = obj.reject;
-  var title = params.title,
-    needOriginalRes = params.needOriginalRes,
-    dataType = params.dataType,
-    errorCodeName = params.errorCodeName,
-    errorMsgName = params.errorMsgName,
-    success = params.success,
-    loading = params.loading;
-  var data = res.data || {};
-  if (vk.pubfn.isNotNullAll(errorCodeName, data[errorCodeName])) {
-    data.code = data[errorCodeName];
-    delete data[errorCodeName];
-  }
-  if (vk.pubfn.isNotNullAll(errorMsgName, data[errorMsgName])) {
-    data.msg = data[errorMsgName];
-    if (typeof data[errorMsgName] === "string") {
-      delete data[errorMsgName];
-    }
-  }
-  if (config.debug) Logger.result = (0, _typeof2.default)(data) == "object" ? vk.pubfn.copyObject(data) : data;
-  if ([1301, 1302, 30201, 30202, 30203, 30204].indexOf(data.code) > -1 && data.msg.indexOf("token") > -1) {
-    // 执行 login 拦截器函数（跳转到页面页面）
-    var _vk$callFunctionUtil$ = vk.callFunctionUtil.interceptor,
-      interceptor = _vk$callFunctionUtil$ === void 0 ? {} : _vk$callFunctionUtil$;
-    if (typeof interceptor.login === "function") {
-      interceptor.login({
-        res: data,
-        params: params,
-        vk: vk
-      });
-    }
-    reject(data);
-  } else if (res.statusCode >= 400 || data.code) {
-    requestFail({
-      res: data,
-      params: params,
-      Logger: Logger,
-      reject: reject
-    });
-  } else {
-    if (title) vk.hideLoading();
-    if (loading) vk.setLoading(false, loading);
-    if (needOriginalRes) data.originalRes = vk.pubfn.copyObject(res);
-    if (data.vk_uni_token) vk.callFunctionUtil.saveToken(data.vk_uni_token);
-    if (data.userInfo && data.needUpdateUserInfo) vk.callFunctionUtil.updateUserInfo(data);
-    if (typeof success === "function") success(data);
-    if (typeof resolve === "function") resolve(data);
-  }
-}
-
-// 请求失败回调
-function requestFail() {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var vk = uni.vk;
-  var config = requestUtil.config;
-  var _obj$res2 = obj.res,
-    res = _obj$res2 === void 0 ? {} : _obj$res2,
-    params = obj.params,
-    Logger = obj.Logger,
-    reject = obj.reject;
-  var title = params.title,
-    needAlert = params.needAlert,
-    fail = params.fail,
-    loading = params.loading;
-  if (typeof needAlert === "undefined") {
-    needAlert = typeof fail === "function" ? false : true;
-  }
-  var errMsg = "";
-  var sysErr = false;
-  if (typeof res.code !== "undefined") {
-    errMsg = res.msg;
-  } else {
-    sysErr = true;
-    errMsg = JSON.stringify(res);
-  }
-  if (errMsg.indexOf("fail timeout") > -1) {
-    sysErr = true;
-    errMsg = "请求超时，请重试！";
-  }
-  if (config.debug) Logger.error = res;
-  if (title) vk.hideLoading();
-  if (loading) vk.setLoading(false, loading);
-  var runKey = true;
-  // 自定义拦截器开始-----------------------------------------------------------
-  var _vk$callFunctionUtil$2 = vk.callFunctionUtil.getConfig(),
-    _vk$callFunctionUtil$3 = _vk$callFunctionUtil$2.interceptor,
-    interceptor = _vk$callFunctionUtil$3 === void 0 ? {} : _vk$callFunctionUtil$3;
-  if (interceptor.request && typeof interceptor.request.fail == "function") {
-    runKey = interceptor.request.fail({
-      vk: vk,
-      res: res,
-      params: params
-    });
-    if (runKey === undefined) runKey = true;
-  }
-  // 自定义拦截器结束-----------------------------------------------------------
-  if (runKey) {
-    if (needAlert && vk.pubfn.isNotNull(errMsg)) {
-      if (sysErr) {
-        vk.toast("网络开小差了！", "none");
-      } else {
-        vk.alert(errMsg);
-      }
-    }
-    if (typeof fail === "function") fail(res);
-    if (typeof reject === "function") reject(res);
-  }
-}
-
-// 请求完成回调
-function requestComplete() {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var vk = uni.vk;
-  var config = requestUtil.config;
-  var _obj$res3 = obj.res,
-    res = _obj$res3 === void 0 ? {} : _obj$res3,
-    params = obj.params,
-    Logger = obj.Logger;
-  var title = params.title,
-    needOriginalRes = params.needOriginalRes,
-    complete = params.complete;
-  if (config.debug) {
-    Logger.endTime = new Date().getTime();
-    Logger.runTime = Logger.endTime - Logger.startTime;
-    var colorArr = config.logger.colorArr;
-    var colorStr = colorArr[counterNum % colorArr.length];
-    counterNum++;
-    console.log("%c--------【开始】【服务器请求】【" + Logger.action + "】--------", 'color: ' + colorStr + ';font-size: 12px;font-weight: bold;');
-    console.log("【请求地址】: ", Logger.url);
-    console.log("【请求参数】: ", Logger.params);
-    console.log("【返回数据】: ", Logger.result);
-    console.log("【请求状态】: ", res.statusCode, "【http状态码】");
-    console.log("【总体耗时】: ", Logger.runTime, "毫秒【含页面渲染】");
-    console.log("【请求时间】: ", vk.pubfn.timeFormat(Logger.startTime, "yyyy-MM-dd hh:mm:ss"));
-    if (Logger.error) {
-      var errorLog = console.warn || console.error;
-      if (Logger.error.err && Logger.error.err.stack) {
-        console.error("【Error】: ", Logger.error);
-        console.error("【Stack】: ", Logger.error.err.stack);
-      } else {
-        errorLog("【Error】: ", Logger.error);
-      }
-    }
-    console.log("%c--------【结束】【服务器请求】【" + Logger.action + "】--------", 'color: ' + colorStr + ';font-size: 12px;font-weight: bold;');
-  }
-  var data = res.data;
-  if (needOriginalRes) data.originalRes = vk.pubfn.copyObject(res);
-  if (typeof complete === "function") complete(data);
-}
-
-/**
- * 修改请求配置中的公共请求参数
- * 若把shop-manage改成*则代表全局
-	vk.requestUtil.updateRequestGlobalParam({
-		"shop-manage":{
-			regExp:"^xxx/kh/",
-			data:{
-				shop_id : shop_id
-			}
-		}
-	});
-	对应的request中增加参数globalParamName:"shop-manage"
-	vk.request({
-		url: 'xxx/xxxxxx',
-		title: '请求中...',
-		globalParamName:"shop-manage",// 如果设置了正则规则,则不需要此参数
-		data: {},
-		success(data) {
-		}
-	});
- */
-requestUtil.updateRequestGlobalParam = function () {
-  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var setKey = arguments.length > 1 ? arguments[1] : undefined;
-  var vk = uni.vk;
-  var config = requestUtil.config;
-  if (setKey) {
-    // 覆盖对象
-    config.request.dataParam = data;
-  } else {
-    // 覆盖参数(有就覆盖,没有则新增)
-    config.request.dataParam = Object.assign(config.request.dataParam, data);
-  }
-  vk.setStorageSync(config.requestGlobalParamKeyName, config.request.dataParam);
-};
-
-/**
- * 获取请求配置中的公共请求参数
-	vk.requestUtil.getRequestGlobalParam();
- */
-requestUtil.getRequestGlobalParam = function () {
-  var globalParamName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "*";
-  var vk = uni.vk;
-  var config = requestUtil.config;
-  var data = config.request.dataParam;
-  if (!data || JSON.stringify(data) === "{}") {
-    data = uni.getStorageSync(config.requestGlobalParamKeyName) || {};
-    config.request.dataParam = data;
-  }
-  var param = data[globalParamName] || {};
-  return JSON.parse(JSON.stringify(param));
-};
-
-/**
- * 删除请求配置中的公共请求参数
- * globalParamName 不传代表删除所有
-	vk.requestUtil.deleteRequestGlobalParam(globalParamName);
- */
-requestUtil.deleteRequestGlobalParam = function (globalParamName) {
-  var vk = uni.vk;
-  var config = requestUtil.config;
-  var globalParam = uni.getStorageSync(config.requestGlobalParamKeyName) || {};
-  if (globalParamName) {
-    delete globalParam[globalParamName];
-  } else {
-    globalParam = {};
-  }
-  config.request.dataParam = globalParam;
-  vk.setStorageSync(config.requestGlobalParamKeyName, globalParam);
-};
-var _default = requestUtil;
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ })
 

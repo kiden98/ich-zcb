@@ -3147,6 +3147,13 @@ u-dropdown {
 .wrap {
   padding: 20rpx;
 }
+.line2 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 page {
   background: #f4f5fc;
 }
