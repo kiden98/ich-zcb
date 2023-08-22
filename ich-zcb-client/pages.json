@@ -50,6 +50,15 @@
             }
             
         }
+        ,{
+            "path" : "components/product-list/product-list",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages_template",

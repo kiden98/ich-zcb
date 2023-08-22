@@ -4,4 +4,5 @@ export default {
 	getCategroyList:['common/category/pub/getList'],
 	getProductList:['common/product/pub/getList'],
 	addCart:['common/cart/pub/add'],
+	getProductDetail:['common/product/pub/getDetail']
 }

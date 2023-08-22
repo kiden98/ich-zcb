@@ -26,35 +26,21 @@
 			</view>
 		</view>
 		<view class="product-wrap" v-if="isSearched">
-			<view class="product-list">
-				<view class="product-item" v-for="(item,index) in productList" :key="index">
-					<view class="product-image">
-						<u-lazy-load threshold="0" border-radius="10" :image="item.image"></u-lazy-load>
-					</view>
-					<view class="product-info">
-						<view class="product-name line2">
-							{{item.name || ""}}
-						</view>
-						<view class="product-price">
-							<view class="product-price-txt">
-								{{item.price | formatPrice}}
-							</view>
-							<view class="shopping-cart">
-								<u-icon name="shopping-cart-fill" color="#dd6161" size="40" ></u-icon>
-							</view>
-						</view>
-					</view>
-				</view>				
-				<view class="empty-wrap" v-if="productList.length == 0">
-					<u-empty text="没有找到相关商品" mode="data"></u-empty>
-				</view>
-			</view>
+			<!-- 使用自定义的组件，父组件向子组件传递属性值 -->
+			<ProductList :productList = "productList"></ProductList>
 		</view>
 	</view>
 </template>
 
 <script>
+	// import {addCart} from '@/utils'
+	//引入自定义组件
+	import ProductList from '@/components/product-list/product-list.vue'
 	export default {
+		//注册组件，否则不显示
+		components:{
+			ProductList
+		},
 		data() {
 			return {
 				keyword:"",
@@ -95,7 +81,16 @@
 			handleFocus(){
 				this.isSearched=false
 				this.productList = []
-			}
+			},
+			clearHistory(){
+				this.keywordHistory = []
+				vk.setStorageSync('keywordHistory',this.keywordHistory)
+			},
+			clickHistory(item){
+				this.keyword = item
+				this.onSearch()
+			},
+			
 		}
 	}
 </script>
@@ -126,40 +121,6 @@
 			}
 		}
 	}
-	.product-wrap{
-		.product-item{
-			display: flex;
-			align-items: center;
-			margin-bottom: 10rpx;
-			padding: 20rpx;
-			border-radius: 10rpx;
-			background-color: $u-primary-bg-color;
-			.product-image{
-				flex: 1;
-				width: 100%;
-				margin-right: 20rpx;
-			}
-			.product-info{
-				flex: 3;
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-				.product-name{
-					width: 400rpx;
-					font-size: 30rpx;
-					margin-top: 5px;
-					color: $u-main-color;
-				}
-				.product-price{
-					display: flex;
-					justify-content: space-between;
-					.product-price-txt{
-						font-size: 32rpx;
-						color: $u-primary-price-color;
-					}
-				}
-			}
-		}
-	}
+	
 
 </style>
